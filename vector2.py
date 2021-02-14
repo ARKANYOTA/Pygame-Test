@@ -1,4 +1,4 @@
-from math import *
+from math import sqrt
 class Vector2:
     def __init__(self, x=0, y=0):
         self.xy = self.x, self.y = x, y
@@ -26,11 +26,10 @@ class Vector2:
         return self // a
     def __repr__(self):
         return f"Vector2({self.x}, {self.y})"
-    def __len__(self):
-        return norm(self)
-
     def norm(self):
         return sqrt(self.x * self.x + self.y * self.y)
+    def __len__(self):
+        return self.norm()
     def normalized(self):
         return self / self.norm()
     def normsq(self):

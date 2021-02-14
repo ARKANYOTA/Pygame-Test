@@ -1,16 +1,15 @@
 import sys, pygame
 from vector2 import *
-from random import *
-pygame.init()
+from random import randint, uniform
+from math import sin, cos, floor
 
 size = width, height = 1100, 700
 speed = [2, 2]
 black = 0, 0, 0
 circlepos = [width/2, height/2]
 screen = pygame.display.set_mode(size)
+DISPLAY = pygame.display.set_mode((width, height), 0, 32)
 
-ball = pygame.image.load("redsquare.png")
-ballrect = ball.get_rect()
 def get_dir():
     return (1* pygame.key.get_pressed()[pygame.K_RIGHT] - 1* pygame.key.get_pressed()[pygame.K_LEFT],
             1* pygame.key.get_pressed()[pygame.K_DOWN]  - 1* pygame.key.get_pressed()[pygame.K_UP])
@@ -30,7 +29,7 @@ def smoothstep2(a0, a1, w):
 def randomGrid(ix, iy):
     # Random float. No precomputed gradients mean this works for any number of grid coordinates
     # Readapted from source C code: https://en.wikipedia.org/wiki/Perlin_noise
-    random = 2920.0 * sin(ix * 21942.0 + iy * 171324.0 + 8912.0) * cos(ix * 23157.0 * iy * 217832.0 + 9758.0);
+    random = 2920.0 * sin(ix * 21942.0 + iy * 171324.0 + 8912.0) * cos(ix * 23157.0 * iy * 217832.0 + 9758.0)
     return Vector2(cos(random), sin(random))
 
 def pnoise(x, y):
@@ -83,18 +82,17 @@ def perlinnoise(display, grid, color, pixw, cellw):
 def clamp(val, a, b):
     return max(a, min(val, b))
 
-def printpnoise(x, y, w, h, s):
+def printpnoise(x, y, w, h, scale):
     for i in range(w):
         for j in range(h):
-            val = pnoise(i/s, j/s)
+            val = pnoise(i/scale, j/scale)
             val = val
             val = clamp( (128*(val+1)), 0, 255)
             pygame.draw.rect(DISPLAY, (val, val, val), (i+x, j+y, 1, 1))
 
-DISPLAY = pygame.display.set_mode((width, height), 0, 32)
 def main():
-    WHITE = (255, 255, 255)
-    BLUE = (0, 0, 255)
+    #WHITE = (255, 255, 255)
+    #BLUE = (0, 0, 255)
 
     pygame.init()
     printpnoise(0, 0, 400, 400, 30)
