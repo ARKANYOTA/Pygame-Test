@@ -10,6 +10,7 @@ black = 0, 0, 0
 circlepos = [scrwidth/2, scrheight/2]
 screen = pygame.display.set_mode(size)
 DISPLAY = pygame.display.set_mode((scrwidth, scrheight), 0, 32)
+groundImg = pygame.image.load("dummyGround.png")
 
 def get_dir():
     return Vector2(1* pygame.key.get_pressed()[pygame.K_RIGHT] - 1* pygame.key.get_pressed()[pygame.K_LEFT],
@@ -83,21 +84,20 @@ def perlinnoise(display, grid, color, pixw, cellw):
 def clamp(val, a, b):
     return max(a, min(val, b))
 
-def printpnoise(x, y, nx, ny, w, h, s, blkw):
+def printpnoise(x, y, nx, ny, w, h, s, blockw):
     for i in range(w):
         for j in range(h):
             div = 5
-            val = pnoise(i/s+nx, j/s+ny)
-            if div != 0:
-                val = floor( (val+.5) *div)/div
-            val = clamp( (128*(val+1)), 0, 255)
-            if 190 < val:
+            val = (pnoise(i/s+nx, j/s+ny)+1) /2
+            if .5 < val:
                 val = 255
-            elif 150 < val:
+                DISPLAY.blit(groundImg, (i*blockw,j*blockw))
+            elif .5 < val:
                 val = 127
             else:
                 val = 0
-            pygame.draw.rect(DISPLAY, (val, val, val), (i*blkw+x, j*blkw+y, blkw, blkw))
+            #pygame.draw.rect(DISPLAY, (val, val, val), (i*blkw+x, j*blkw+y, blkw, blkw))
+
 
 def main():
     #WHITE = (255, 255, 255)
@@ -105,11 +105,11 @@ def main():
 
     pygame.init()
     noiseposy = 0
-    blockw = 32
+    blockw = 64
     scale = 10
     printpnoise(0, 0, 0, noiseposy, scrwidth // blockw, scrheight // blockw, scale, blockw)
     while True:
-        pygame.display.flip()
+        screen.fill((0,0,0))
         for event in pygame.event.get():
             pass
             if event.type == pygame.QUIT:
@@ -122,15 +122,16 @@ def main():
             scale -= 0.05
             print(scale)
         if dirr.y == -1:
-            noiseposy -= 0.05
+            noiseposy -= 1
             print(scale)
         elif dirr.y == 1:
-            noiseposy += 0.05
+            noiseposy += 1
             print(scale)
         else:
             pass
         if dirr != Vector2(0,0):
             printpnoise(0, 0, 0, noiseposy, scrwidth // blockw, scrheight // blockw, scale, blockw)
+        pygame.display.flip()
 
 
 main()
