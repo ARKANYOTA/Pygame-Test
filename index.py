@@ -3,17 +3,18 @@ from vector2 import *
 from random import *
 pygame.init()
 
-size = width, height = 1100, 700
+worldseed = uniform(-65536,65535)
+size = scrwidth, scrheight = 1100, 700
 speed = [2, 2]
 black = 0, 0, 0
-circlepos = [width/2, height/2]
+circlepos = [scrwidth/2, scrheight/2]
 screen = pygame.display.set_mode(size)
 
 ball = pygame.image.load("redsquare.png")
 ballrect = ball.get_rect()
 def get_dir():
-    return (1* pygame.key.get_pressed()[pygame.K_RIGHT] - 1* pygame.key.get_pressed()[pygame.K_LEFT],
-            1* pygame.key.get_pressed()[pygame.K_DOWN]  - 1* pygame.key.get_pressed()[pygame.K_UP])
+    return Vector2(1* pygame.key.get_pressed()[pygame.K_RIGHT] - 1* pygame.key.get_pressed()[pygame.K_LEFT],
+                   1* pygame.key.get_pressed()[pygame.K_DOWN]  - 1* pygame.key.get_pressed()[pygame.K_UP])
 
 def randcol():
     return (randint(0,255), randint(0,255), randint(0,255))
@@ -30,7 +31,7 @@ def smoothstep2(a0, a1, w):
 def randomGrid(ix, iy):
     # Random float. No precomputed gradients mean this works for any number of grid coordinates
     # Readapted from source C code: https://en.wikipedia.org/wiki/Perlin_noise
-    random = 2920.0 * sin(ix * 21942.0 + iy * 171324.0 + 8912.0) * cos(ix * 23157.0 * iy * 217832.0 + 9758.0);
+    random = 2920.0 * sin(ix * 21942.0 + iy * 171324.0 + 8912.0 + worldseed) * cos(ix * 23157.0 * worldseed * iy * 217832.0 + 9758.0);
     return Vector2(cos(random), sin(random))
 
 def pnoise(x, y):
@@ -83,29 +84,55 @@ def perlinnoise(display, grid, color, pixw, cellw):
 def clamp(val, a, b):
     return max(a, min(val, b))
 
-def printpnoise(x, y, w, h, s):
+def printpnoise(x, y, nx, ny, w, h, s, blkw):
     for i in range(w):
         for j in range(h):
-            val = pnoise(i/s, j/s)
-            val = val
+            div = 5
+            val = pnoise(i/s+nx, j/s+ny)
+            if div != 0:
+                val = floor( (val+.5) *div)/div
             val = clamp( (128*(val+1)), 0, 255)
-            pygame.draw.rect(DISPLAY, (val, val, val), (i+x, j+y, 1, 1))
+            if 190 < val:
+                val = 255
+            elif 150 < val:
+                val = 127
+            else:
+                val = 0
+            pygame.draw.rect(DISPLAY, (val, val, val), (i*blkw+x, j*blkw+y, blkw, blkw))
 
-DISPLAY = pygame.display.set_mode((width, height), 0, 32)
+DISPLAY = pygame.display.set_mode((scrwidth, scrheight), 0, 32)
 def main():
     WHITE = (255, 255, 255)
     BLUE = (0, 0, 255)
 
     pygame.init()
-    printpnoise(0, 0, 400, 400, 30)
+    noiseposy = 0
+    blockw = 32
+    scale = 10
+    printpnoise(0, 0, 0, noiseposy, scrwidth // blockw, scrheight // blockw, scale, blockw)
     while True:
         pygame.display.flip()
         for event in pygame.event.get():
             pass
             if event.type == pygame.QUIT:
                 sys.exit()
-
+        dirr = get_dir()
+        if dirr.x == 1:
+            scale += 0.05
+            print(scale)
+        elif dirr.x == -1:
+            scale -= 0.05
+            print(scale)
+        if dirr.y == -1:
+            noiseposy -= 0.05
+            print(scale)
+        elif dirr.y == 1:
+            noiseposy += 0.05
+            print(scale)
+        else:
+            pass
+        if dirr != Vector2(0,0):
+            printpnoise(0, 0, 0, noiseposy, scrwidth // blockw, scrheight // blockw, scale, blockw)
 
 
 main()
-pique_nique_sa_mère = "oui"
