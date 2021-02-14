@@ -2,6 +2,7 @@ import sys, pygame
 from vector2 import *
 from random import randint, uniform
 from math import sin, cos, floor
+from time import sleep
 
 worldseed = uniform(-65536,65535)
 size = scrwidth, scrheight = 1100, 700
@@ -10,6 +11,8 @@ black = 0, 0, 0
 circlepos = [scrwidth/2, scrheight/2]
 screen = pygame.display.set_mode(size)
 DISPLAY = pygame.display.set_mode((scrwidth, scrheight), 0, 32)
+blockw = 32
+screen = [[0 for k in range(scrwidth)]for i in range(scrheight)]
 
 def get_dir():
     return Vector2(1* pygame.key.get_pressed()[pygame.K_RIGHT] - 1* pygame.key.get_pressed()[pygame.K_LEFT],
@@ -30,7 +33,7 @@ def smoothstep2(a0, a1, w):
 def randomGrid(ix, iy):
     # Random float. No precomputed gradients mean this works for any number of grid coordinates
     # Readapted from source C code: https://en.wikipedia.org/wiki/Perlin_noise
-    random = 2920.0 * sin(ix * 21942.0 + iy * 171324.0 + 8912.0 + worldseed) * cos(ix * 23157.0 * worldseed * iy * 217832.0 + 9758.0);
+    random = 2920.0 * sin(ix * 21942.0 + iy * 171324.0 + 8912.0 + worldseed) * cos(ix * 23157.0 * worldseed * iy * 217832.0 + 9758.0)
     return Vector2(cos(random), sin(random))
 
 def pnoise(x, y):
@@ -84,20 +87,43 @@ def clamp(val, a, b):
     return max(a, min(val, b))
 
 def printpnoise(x, y, nx, ny, w, h, s, blkw):
-    for i in range(w):
-        for j in range(h):
-            div = 5
+    global screen
+    for j in range(h):
+        for i in range(w):
             val = pnoise(i/s+nx, j/s+ny)
-            if div != 0:
-                val = floor( (val+.5) *div)/div
+            val = floor( (val+.5) *5)/5
             val = clamp( (128*(val+1)), 0, 255)
             if 190 < val:
                 val = 255
+                screen[j][i] = 255
             elif 150 < val:
                 val = 127
+                screen[j][i] = 127
             else:
                 val = 0
+                screen[j][i] = 0
             pygame.draw.rect(DISPLAY, (val, val, val), (i*blkw+x, j*blkw+y, blkw, blkw))
+
+def updatescreen(posy) :
+    blkw=blockw
+    global screen
+    del screen[-1]
+    screen.insert(0,[0 for b in range(scrwidth // blockw)])
+    for i in range(scrwidth // blockw) :
+        val = pnoise(i/10+0, 1/10+posy)
+        val = floor( (val+.5) *5)/5
+        val = clamp( (128*(val+1)), 0, 255)
+        if 190 < val:
+            screen[0][i] = 255
+        elif 150 < val:
+            screen[0][i] = 127
+        else:
+            screen[0][i] = 0
+    for h in range(len(screen)) :
+        for w in range(len(screen[0])) :
+            pygame.draw.rect(DISPLAY, (screen[h][w], screen[h][w], screen[h][w]), (w*blkw, h*blkw, blkw, blkw))
+
+
 
 def main():
     #WHITE = (255, 255, 255)
@@ -105,7 +131,6 @@ def main():
 
     pygame.init()
     noiseposy = 0
-    blockw = 32
     scale = 10
     printpnoise(0, 0, 0, noiseposy, scrwidth // blockw, scrheight // blockw, scale, blockw)
     while True:
@@ -114,23 +139,27 @@ def main():
             pass
             if event.type == pygame.QUIT:
                 sys.exit()
-        dirr = get_dir()
-        if dirr.x == 1:
-            scale += 0.05
-            print(scale)
-        elif dirr.x == -1:
-            scale -= 0.05
-            print(scale)
-        if dirr.y == -1:
-            noiseposy -= 0.05
-            print(scale)
-        elif dirr.y == 1:
-            noiseposy += 0.05
-            print(scale)
-        else:
-            pass
-        if dirr != Vector2(0,0):
-            printpnoise(0, 0, 0, noiseposy, scrwidth // blockw, scrheight // blockw, scale, blockw)
+        noiseposy +=-0.05
+        updatescreen(noiseposy)
+        #printpnoise(0, 0, 0, noiseposy, scrwidth // blockw, 1, scale, blockw)
+        sleep(0.5)
 
 
 main()
+
+
+# if dirr.x == 1:
+#             scale += 0.05
+#             print(scale)
+#         elif dirr.x == -1:
+#             scale -= 0.05
+#             print(scale)
+#         if dirr.y == -1:
+#             noiseposy -= 0.05
+#             print(scale)
+#         elif dirr.y == 1:
+#             noiseposy += 0.05
+#             print(scale)
+#         else:
+#             pass
+#         if dirr != Vector2(0,0):
