@@ -9,10 +9,11 @@ size = scrwidth, scrheight = 1100, 700
 speed = [2, 2]
 black = 0, 0, 0
 circlepos = [scrwidth/2, scrheight/2]
-screen = pygame.display.set_mode(size)
+screend = pygame.display.set_mode(size)
 DISPLAY = pygame.display.set_mode((scrwidth, scrheight), 0, 32)
 blockw = 32
 screen = [[0 for k in range(scrwidth)]for i in range(scrheight)]
+groundImg = pygame.image.load("dummyGround.png")
 
 def get_dir():
     return Vector2(1* pygame.key.get_pressed()[pygame.K_RIGHT] - 1* pygame.key.get_pressed()[pygame.K_LEFT],
@@ -86,23 +87,23 @@ def perlinnoise(display, grid, color, pixw, cellw):
 def clamp(val, a, b):
     return max(a, min(val, b))
 
-def printpnoise(x, y, nx, ny, w, h, s, blkw):
+def printpnoise(x, y, nx, ny, w, h, s, blockw):
     global screen
     for j in range(h):
         for i in range(w):
-            val = pnoise(i/s+nx, j/s+ny)
-            val = floor( (val+.5) *5)/5
-            val = clamp( (128*(val+1)), 0, 255)
-            if 190 < val:
+            val = (pnoise(i/s+nx, j/s+ny)+1) /2
+            if .5 < val:
                 val = 255
                 screen[j][i] = 255
-            elif 150 < val:
+                DISPLAY.blit(groundImg, (i*blockw,j*blockw))
+            elif .4 < val:
                 val = 127
                 screen[j][i] = 127
             else:
                 val = 0
                 screen[j][i] = 0
-            pygame.draw.rect(DISPLAY, (val, val, val), (i*blkw+x, j*blkw+y, blkw, blkw))
+            pygame.draw.rect(DISPLAY, (val, val, val), (i*blockw+x, j*blockw+y, blockw, blockw))
+
 
 def updatescreen(posy) :
     blkw=blockw
@@ -133,14 +134,15 @@ def main():
     noiseposy = 0
     scale = 10
     printpnoise(0, 0, 0, noiseposy, scrwidth // blockw, scrheight // blockw, scale, blockw)
+    pygame.draw.rect(DISPLAY, (255, 255, 255), (0,0, 200, 200))
     while True:
-        pygame.display.flip()
+        #screend.fill((0,0,0))
         for event in pygame.event.get():
             pass
             if event.type == pygame.QUIT:
                 sys.exit()
         noiseposy +=-0.05
-        updatescreen(noiseposy)
+        #updatescreen(noiseposy)
         #printpnoise(0, 0, 0, noiseposy, scrwidth // blockw, 1, scale, blockw)
         sleep(0.5)
 
