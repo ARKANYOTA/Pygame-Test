@@ -1,6 +1,7 @@
 import sys, pygame
 from vector2 import *
 from perlinnoise import *
+from player import Player
 from random import randint, uniform
 from math import sin, cos, floor
 from time import sleep
@@ -41,6 +42,9 @@ def main():
     DISPLAY = pygame.display.set_mode(screensize, 0, 32)
 
     # Textures
+    player1Texture = pygame.transform.scale(pygame.image.load("redsquare.png"), (64, 64))
+    player2Texture = pygame.image.load("intro_ball.gif")
+    playerTextures = [player1Texture, player2Texture]
 
     # Game constants
     BLOCKWIDTH = 32
@@ -52,15 +56,24 @@ def main():
     noiseposy = 0
     scale = 10
 
+    # Players init
+    players = []
+    players.append(Player(1, pygame, DISPLAY))
+    players[0].init()
+
     noise.print_perlin_noise(DISPLAY, 0, 0, scrwidth // BLOCKWIDTH, scrheight // BLOCKWIDTH, BLOCKWIDTH)
     while True:
-        screen.fill((0,0,0))
+        screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
 
         noise.print_perlin_noise(DISPLAY, 0, 0, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH, BLOCKWIDTH)
         noise.y -= 1
+
+        for player in players:
+            DISPLAY.blit(playerTextures[player.playerNumber - 1], (player.getX(), player.getY()))
+            player.update()
 
         pygame.display.flip()
         pygame.time.delay(500)
