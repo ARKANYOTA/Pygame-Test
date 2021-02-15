@@ -19,13 +19,14 @@ playerTextures = [player1Texture, player2Texture]
 players = []
 
 
+
 def get_dir():
     return Vector2(1 * pygame.key.get_pressed()[pygame.K_RIGHT] - 1 * pygame.key.get_pressed()[pygame.K_LEFT],
                    1 * pygame.key.get_pressed()[pygame.K_DOWN] - 1 * pygame.key.get_pressed()[pygame.K_UP])
 
 
 def randcol():
-    return randint(0, 255), randint(0, 255), randint(0, 255)
+    return (randint(0, 255), randint(0, 255), randint(0, 255))
 
 
 def smoothstep(a0, a1, w):
@@ -100,12 +101,15 @@ def clamp(val, a, b):
     return max(a, min(val, b))
 
 
-def printpnoise(x, y, nx, ny, w, h, s, blockw):
+def printpnoise(x, y, nx, ny, w, h, s, blkw):
     for i in range(w):
         for j in range(h):
             div = 5
-            val = (pnoise(i / s + nx, j / s + ny) + 1) / 2
-            if .5 < val:
+            val = pnoise(i / s + nx, j / s + ny)
+            if div != 0:
+                val = floor((val + .5) * div) / div
+            val = clamp((128 * (val + 1)), 0, 255)
+            if 190 < val:
                 val = 255
                 DISPLAY.blit(groundImg, (i * blockw, j * blockw))
             elif .5 < val:
