@@ -13,7 +13,7 @@ screen = pygame.display.set_mode(size)
 DISPLAY = pygame.display.set_mode((scrwidth, scrheight), 0, 32)
 groundImg = pygame.image.load("dummyGround.png")
 
-player1Texture = pygame.image.load("redsquare.png")
+player1Texture = pygame.transform.scale(pygame.image.load("redsquare.png"), (64, 64))
 player2Texture = pygame.image.load("intro_ball.gif")
 playerTextures = [player1Texture, player2Texture]
 players = []
@@ -126,7 +126,8 @@ def main():
     printpnoise(0, 0, 0, noiseposy, scrwidth // blockw, scrheight // blockw, scale, blockw)
     while True:
         if len(players) == 0:
-            players.append(Player(1))
+            players.append(Player(1, pygame, DISPLAY))
+            players[0].init()
 
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
@@ -154,15 +155,7 @@ def main():
 
         for player in players:
             DISPLAY.blit(playerTextures[player.playerNumber - 1], (player.getX(), player.getY()))
-
-        if pygame.key.get_pressed()[pygame.K_d]:
-            player.moveX(3)
-        if pygame.key.get_pressed()[pygame.K_a]:
-            player.moveX(-3)
-        if pygame.key.get_pressed()[pygame.K_w]:
-            player.moveY(-3)
-        if pygame.key.get_pressed()[pygame.K_s]:
-            player.moveY(3)
+            player.update()
 
         pygame.display.flip()
 
