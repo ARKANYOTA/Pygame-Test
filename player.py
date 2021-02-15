@@ -1,29 +1,29 @@
+from vector2 import Vector2
 
-class player:
+
+class Player:
     def __init__(self, playerNumber):
-        self.player_number = playerNumber
-        self.x = 0
-        self.y = 0
+        self.playerNumber = playerNumber
+        self.location = Vector2()
 
         self.axe = 0
         self.pickaxe = 0
         self.hand = 0
 
     def setLocation(self, location):
-        self.x = location[0]
-        self.y = location[1]
+        self.location = location
 
     def setX(self, x):
-        self.x = x
+        self.location.x = x
 
     def setY(self, y):
-        self.y = y
+        self.location.y = y
 
     def moveX(self, x):
-        self.x += x
+        self.location.x += x
 
     def moveY(self, y):
-        self.y += y
+        self.location.y += y
 
     def setAxe(self, level):
         self.axe = level
@@ -35,13 +35,13 @@ class player:
         self.hand = tool
 
     def getLocation(self):
-        return self.x, self.y
+        return self.location.x, self.location.y
 
     def getX(self):
-        return self.x
+        return self.location.x
 
     def getY(self):
-        return self.y
+        return self.location.y
 
     def getAxe(self):
         return self.axe
@@ -53,4 +53,4 @@ class player:
         return self.hand
 
     def getPlayerNumber(self):
-        return self.player_number
+        return self.playerNumber

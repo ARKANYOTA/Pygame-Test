@@ -1,4 +1,5 @@
 import sys, pygame
+from player import Player
 from vector2 import *
 from random import randint, uniform
 from math import sin, cos, floor
@@ -11,6 +12,11 @@ circlepos = [scrwidth / 2, scrheight / 2]
 screen = pygame.display.set_mode(size)
 DISPLAY = pygame.display.set_mode((scrwidth, scrheight), 0, 32)
 groundImg = pygame.image.load("dummyGround.png")
+
+player1Texture = pygame.image.load("redsquare.png")
+player2Texture = pygame.image.load("intro_ball.gif")
+playerTextures = [player1Texture, player2Texture]
+players = []
 
 
 def get_dir():
@@ -119,11 +125,15 @@ def main():
     scale = 10
     printpnoise(0, 0, 0, noiseposy, scrwidth // blockw, scrheight // blockw, scale, blockw)
     while True:
+        if len(players) == 0:
+            players.append(Player(1))
+
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
             pass
             if event.type == pygame.QUIT:
                 sys.exit()
+
         dirr = get_dir()
         if dirr.x == 1:
             scale += 0.05
@@ -141,6 +151,19 @@ def main():
             pass
         if dirr != Vector2(0, 0):
             printpnoise(0, 0, 0, noiseposy, scrwidth // blockw, scrheight // blockw, scale, blockw)
+
+        for player in players:
+            DISPLAY.blit(playerTextures[player.playerNumber - 1], (player.getX(), player.getY()))
+
+        if pygame.key.get_pressed()[pygame.K_d]:
+            player.moveX(3)
+        if pygame.key.get_pressed()[pygame.K_a]:
+            player.moveX(-3)
+        if pygame.key.get_pressed()[pygame.K_w]:
+            player.moveY(-3)
+        if pygame.key.get_pressed()[pygame.K_s]:
+            player.moveY(3)
+
         pygame.display.flip()
 
 
