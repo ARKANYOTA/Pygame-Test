@@ -5,6 +5,7 @@ class Player:
     def __init__(self, playerNumber, pygame, display):
         self.playerNumber = playerNumber
         self.location = Vector2()
+        self.yVelocity = 0
         self.pygame = pygame
         self.display = display
 
@@ -20,6 +21,12 @@ class Player:
 
     def setY(self, y):
         self.location.y = y
+
+    def setYVelocity(self, yVelocity):
+        self.yVelocity = yVelocity
+
+    def addYVelocity(self, yVelocity):
+        self.yVelocity += yVelocity
 
     def moveX(self, x):
         self.location.x += x
@@ -45,6 +52,9 @@ class Player:
     def getY(self):
         return self.location.y
 
+    def getYVelocity(self):
+        return self.yVelocity
+
     def getAxe(self):
         return self.axe
 
@@ -58,29 +68,41 @@ class Player:
         return self.playerNumber
 
     def isOnGround(self):
-        return self.display.get_at((self.getX(), self.getY() + 65)) != (0, 0, 0, 255) or \
-               self.display.get_at((self.getX() + 64, self.getY() + 65)) != (0, 0, 0, 255)
+        try:
+            return self.display.get_at((self.getX() + 1, self.getY() + 33)) != (0, 0, 0, 255) or \
+                   self.display.get_at((self.getX() + 31, self.getY() + 33)) != (0, 0, 0, 255)
+        except:
+            return False
 
     def init(self):
-        for x in range(0, 1100, 64):
-            for y in range(0, 700, 64):
+        for x in range(0, 1100, 32):
+            for y in range(0, 700, 32):
                 # print("X=" + str(x) + " && Y=" + str(y) + ":", display.get_at((x, y)))
                 try:
                     if self.display.get_at((x, y)) == (0, 0, 0, 255) and \
-                            self.display.get_at((x, y + 64)) == (246, 195, 143, 255):
+                            self.display.get_at((x, y + 32)) == (246, 195, 143, 255):
                         self.setLocation(Vector2(x, y))
                 except:
                     pass
 
     def update(self):
-        if self.pygame.key.get_pressed()[self.pygame.K_d]:
-            self.moveX(3)
-        if self.pygame.key.get_pressed()[self.pygame.K_a]:
-            self.moveX(-3)
-        if self.pygame.key.get_pressed()[self.pygame.K_w] and self.isOnGround():
-            self.moveY(-128)
-        if self.pygame.key.get_pressed()[self.pygame.K_s]:
-            self.moveY(3)
+        try:
+            if self.pygame.key.get_pressed()[self.pygame.K_d] and \
+                    self.display.get_at((self.getX() + 35, self.getY())) == (0, 0, 0, 255):
+                self.moveX(3)
+            if self.pygame.key.get_pressed()[self.pygame.K_a] and \
+                    self.display.get_at((self.getX() - 3, self.getY())) == (0, 0, 0, 255):
+                self.moveX(-3)
+            if self.pygame.key.get_pressed()[self.pygame.K_w] and self.isOnGround():
+                self.addYVelocity(-35)
+            if self.pygame.key.get_pressed()[self.pygame.K_s]:
+                self.moveY(3)
+            self.moveY(self.getYVelocity())
 
-        if not self.isOnGround():
-            self.moveY(2)
+            if not self.isOnGround():
+                if self.getYVelocity() < 4:
+                    self.addYVelocity(1)
+            else:
+                self.setYVelocity(0)
+        except:
+            pass
