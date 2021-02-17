@@ -24,6 +24,10 @@ class Vector2:
         return Vector2(self.x // a, self.y // a)
     def __ifloordiv__(self, a):
         return self // a
+    def __mod__(self, a):
+        return Vector2(self.x % a, self.y % a)
+    def __imod__(self, a):
+        return self % a
     def __repr__(self):
         return f"Vector2({self.x}, {self.y})"
     def norm(self):

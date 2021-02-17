@@ -6,15 +6,8 @@ from random import randint, uniform
 from math import sin, cos, floor
 from time import sleep
 
-
-def get_dir():
-    return Vector2(1 * pygame.key.get_pressed()[pygame.K_RIGHT] - 1 * pygame.key.get_pressed()[pygame.K_LEFT],
-                   1 * pygame.key.get_pressed()[pygame.K_DOWN] - 1 * pygame.key.get_pressed()[pygame.K_UP])
-
-
 def randcol():
     return randint(0, 255), randint(0, 255), randint(0, 255)
-
 
 def clamp(val, a, b):
     return max(a, min(val, b))
@@ -30,8 +23,8 @@ def main():
 #    pygame.display.set_caption("My Game")
 
     # Textures
-    player1Texture = pygame.transform.scale(pygame.image.load("../textures/redsquare.png"), (32, 32))
-    player2Texture = pygame.image.load("../textures/intro_ball.gif")
+    player1Texture = pygame.transform.scale(pygame.image.load(r"../textures/redsquare.png"), (32, 32))
+    player2Texture = pygame.image.load(r"../textures/intro_ball.gif")
     playerTextures = [player1Texture, player2Texture]
 
     # Game constants
@@ -39,16 +32,13 @@ def main():
     SEED = uniform(-65536, 65535)
 
     # Game variables
-    map = [[0 for k in range(scrwidth)] for i in range(scrheight)]
-    noise = PerlinNoise(SEED, 0, 0, 10, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH)
-    groundMovement = 0
-    noiseposy = 0
-    scale = 10
+    noise = PerlinNoise(SEED, 0, 0, 10, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH+1)
+    camera = Vector2()
+    scrollspeed = 3
 
     # Players init
     players = []
 
-    noise.print_perlin_noise(DISPLAY, 0, 0, scrwidth // BLOCKWIDTH, (scrheight // BLOCKWIDTH)+3, BLOCKWIDTH)
     while True:
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
@@ -61,12 +51,12 @@ def main():
 
         screen.fill((0,0,0))
         # Noise scrolling
-        noiseposy += 5
-        if noiseposy > BLOCKWIDTH:
-            noise.y -= 1
-            noiseposy %= BLOCKWIDTH
+        noise.screenpos.y += scrollspeed
+        if noise.screenpos.y > BLOCKWIDTH:
+            noise.pos.y -= 1
+            noise.screenpos.y %= BLOCKWIDTH
             noise.update_map()
-        noise.print_perlin_noise(DISPLAY, 0, noiseposy-BLOCKWIDTH, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH, BLOCKWIDTH)
+        noise.print_perlin_noise(DISPLAY, 0, noise.screenpos.y-BLOCKWIDTH, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH, BLOCKWIDTH)
 
         if len(players) == 0:
             players.append(Player(DISPLAY, 1, 0, 0))
@@ -77,5 +67,6 @@ def main():
             player.update()#noise.get_noisemap_list())
         pygame.display.flip()
 
+    pygame.time.delay(0.0166)
 
 main()
