@@ -20,11 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c5d0665b-56fb-422c-a048-76dfe285ae37" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/index.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/perlinnoise.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/perlinnoise.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/player.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/vector2.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/vector2.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
