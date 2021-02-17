@@ -89,7 +89,7 @@ class Player:
         self.velocity *= self.slipperiness
         self.velocity += get_input_wasd() * self.speed
         self.pos += self.velocity
-        self.pos.y -= 3
+        self.pos.y += 3
         # if not self.isOnGround(map):
         #     if self.getYVelocity() < 4:
         #         self.addYVelocity(1)
