@@ -6,13 +6,19 @@ from random import randint, uniform
 from math import sin, cos, floor
 from time import sleep
 
+
 def get_dir():
-    return Vector2(1* pygame.key.get_pressed()[pygame.K_RIGHT] - 1* pygame.key.get_pressed()[pygame.K_LEFT],
-                   1* pygame.key.get_pressed()[pygame.K_DOWN]  - 1* pygame.key.get_pressed()[pygame.K_UP])
+    return Vector2(1 * pygame.key.get_pressed()[pygame.K_RIGHT] - 1 * pygame.key.get_pressed()[pygame.K_LEFT],
+                   1 * pygame.key.get_pressed()[pygame.K_DOWN] - 1 * pygame.key.get_pressed()[pygame.K_UP])
+
+
 def randcol():
-    return (randint(0,255), randint(0,255), randint(0,255))
+    return randint(0, 255), randint(0, 255), randint(0, 255)
+
+
 def clamp(val, a, b):
     return max(a, min(val, b))
+
 
 def update_map(map, posy):
     pass
@@ -42,8 +48,8 @@ def main():
     DISPLAY = pygame.display.set_mode(screensize, 0, 32)
 
     # Textures
-    player1Texture = pygame.transform.scale(pygame.image.load("redsquare.png"), (64, 64))
-    player2Texture = pygame.image.load("intro_ball.gif")
+    player1Texture = pygame.transform.scale(pygame.image.load("../textures/redsquare.png"), (32, 32))
+    player2Texture = pygame.image.load("../textures/intro_ball.gif")
     playerTextures = [player1Texture, player2Texture]
 
     # Game constants
@@ -53,13 +59,12 @@ def main():
     # Game variables
     map = [[0 for k in range(scrwidth)] for i in range(scrheight)]
     noise = PerlinNoise(SEED, 0, 0, 10)
+    groundMovement = 0
     noiseposy = 0
     scale = 10
 
     # Players init
     players = []
-    players.append(Player(1, pygame, DISPLAY))
-    players[0].init()
 
     noise.print_perlin_noise(DISPLAY, 0, 0, scrwidth // BLOCKWIDTH, scrheight // BLOCKWIDTH, BLOCKWIDTH)
     while True:
@@ -68,14 +73,21 @@ def main():
             if event.type == pygame.QUIT:
                 sys.exit()
 
-        noise.print_perlin_noise(DISPLAY, 0, 0, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH, BLOCKWIDTH)
-        noise.y -= 1
+        if groundMovement == 250:
+            groundMovement = 0
+            noise.y -= 1
+        else:
+            groundMovement += 1
+        noise.print_perlin_noise(DISPLAY, 0, 0, scrwidth // BLOCKWIDTH, scrheight // BLOCKWIDTH, BLOCKWIDTH)
+
+        if len(players) == 0:
+            players.append(Player(1, pygame, DISPLAY))
+            players[0].init()
 
         for player in players:
             DISPLAY.blit(playerTextures[player.playerNumber - 1], (player.getX(), player.getY()))
             player.update()
-
         pygame.display.flip()
-        pygame.time.delay(500)
+
 
 main()

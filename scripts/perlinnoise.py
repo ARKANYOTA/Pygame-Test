@@ -72,7 +72,7 @@ class PerlinNoise:
             for row in range(height):
                 noise = self.perlin_noise(col+self.x, row+self.y, self.scale)
                 noise = (noise + 1) / 2
-                if .7 < noise:
+                if .5 < noise:
                     display.blit(groundImg, (col*blockw + screen_x, row*blockw + screen_y))
                 elif .5 < noise:
                     pass
