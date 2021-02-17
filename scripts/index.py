@@ -48,12 +48,13 @@ def main():
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    pass
+                    pygame.quit()
+                    sys.exit()
 
         screen.fill((0,0,0))
 
         # Noise scrolling
-        noise.screenpos.y += scrollspeed
+        #noise.screenpos.y += scrollspeed
         if noise.screenpos.y > BLOCKWIDTH:
             noise.pos.y -= 1
             noise.screenpos.y %= BLOCKWIDTH
@@ -68,10 +69,10 @@ def main():
 
 
         for player in players:
-            DISPLAY.blit(playerTextures[player.playerNumber - 1], (player.getX(), player.getY()))
-            player.update()#noise.get_noisemap_list())
+            DISPLAY.blit(playerTextures[player.playerNumber - 1], (player.pos.x, player.pos.y))
+            player.update(noise.map)#noise.get_noisemap_list())
         pygame.display.flip()
 
-    pygame.time.delay(0.0166)
+    #pygame.time.delay(16)
 
 main()

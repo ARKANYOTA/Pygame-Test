@@ -69,9 +69,19 @@ class PerlinNoise:
         return max(a, min(val, b))
 
     def get_noisemap_list(self):
-        li = []
+        li = [[0] * self.width] * self.height
         for row in range(self.height):
-            li.append(tuple(self.perlin_noise(col+self.pos.x, row+self.pos.y, self.scale) for col in range(self.width)))
+            li2 = [0] * self.width
+            for col in range(self.width):
+                noise = self.perlin_noise(col+self.pos.x, row+self.pos.y, self.scale)
+                if .56 < noise:
+                    noise = 2
+                elif .45 < noise:
+                    noise = 1
+                else:
+                    noise = 0
+                li2[col] = noise
+            li[row] = li2
         return li
 
     def update_map(self):
@@ -84,9 +94,9 @@ class PerlinNoise:
         for row in range(self.height):
             for col in range(self.width):
                 noise = self.map[row][col]
-                if .56 < noise:
+                if noise == 2:
                     display.blit(groundImg, (col*blockw + screen_x, row*blockw + screen_y))
-                elif .45 < noise:
+                elif noise == 1:
                     display.blit(groundBGImg, (col * blockw + screen_x, row * blockw + screen_y))
                 else:
                     pass
