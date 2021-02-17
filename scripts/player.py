@@ -13,6 +13,7 @@ class Player:
         self.speed = speed
         self.slipperiness = slipperiness
 
+        self.isGrounded = False
         self.axe = 0
         self.pickaxe = 0
         self.hand = 0
@@ -70,7 +71,10 @@ class Player:
     def isOnGround(self, map):
         # TODO: make it not a try:except
         try:
-            return map[(self.y + self.width) // self.width + 1][self.x // self.width] != 0
+            i = int((self.pos.y + self.width) // self.width + 1)
+            j = int(self.pos.x // self.width)
+            print(map[i][j])
+            return map[i][j] == 2
         except:
             return False
 
@@ -85,11 +89,29 @@ class Player:
                 except:
                     pass
 
-    def update(self, map=0):
+    def update(self, map):
+        SCROLLSPEED = 3
+
         self.velocity *= self.slipperiness
-        self.velocity += get_input_wasd() * self.speed
+        self.velocity.x += get_input_wasd().x * self.speed
         self.pos += self.velocity
-        self.pos.y -= 3
+        self.pos.y += SCROLLSPEED
+
+        self.isGrounded = self.isOnGround(map)
+
+        # Gravity & velocity
+        #self.velocity.y += 2
+
+        # Jumping
+        if self.isGrounded and get_input_wasd().y < 0:
+            self.velocity.y = -20
+
+        # Collision
+        if self.isGrounded:
+            self.velocity.y = -2
+
+        self.pos += self.velocity
+
         # if not self.isOnGround(map):
         #     if self.getYVelocity() < 4:
         #         self.addYVelocity(1)
