@@ -24,8 +24,8 @@ def main():
 #    pygame.display.set_caption("My Game")
 
     # Textures
-    player1Texture = pygame.transform.scale(pygame.image.load("textures/redsquare.png"), (32, 32))
-    player2Texture = pygame.image.load("textures/intro_ball.gif")
+    player1Texture = pygame.transform.scale(pygame.image.load("../textures/redsquare.png"), (32, 32))
+    player2Texture = pygame.image.load("../textures/intro_ball.gif")
     playerTextures = [player1Texture, player2Texture]
 
     # Game constants
