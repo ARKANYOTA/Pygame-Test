@@ -73,7 +73,7 @@ class Player:
         try:
             i = int((self.pos.y + self.width) // self.width + 1)
             j = int(self.pos.x // self.width)
-            print(map[i][j])
+            #print(map[i][j])
             return map[i][j] == 2
         except:
             return False

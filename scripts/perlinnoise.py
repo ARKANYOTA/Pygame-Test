@@ -105,22 +105,18 @@ class PerlinNoise:
     def find_empty_xy(self, blockw):
         y=len(self.map)//2
         x=len(self.map[0])//2
-        print(len(self.map))
         for i in range(1,int(len(self.map))) :
-            print(i)
             for k in range(1,i+1):
-                print(self.map[y][x],self.map[y-1][x], y, x)
-                if self.map[y][x]<0.45 and self.map[y-1][x]>0.45: #check if emplacement is clear (replace by 0 in next update)
-                    return y*blockw,x*blockw
+                if self.map[y][x]!=2 and self.map[y+1][x]==2: #check if emplacement is clear (replace by 0 in next update)
+                    return (y-1)*blockw,x*blockw
                 else :
                     if i%2==0:
                         x-=1
                     else :
                         x+=1
             for l in range(1,i+1):
-                print(self.map[y][x],self.map[y-1][x], y, x)
-                if self.map[y][x]<0.45 and self.map[y-1][x]>0.45: #check if emplacement is clear (replace by 0 in next update)
-                    return y*blockw,x*blockw
+                if self.map[y][x]!=2 and self.map[y+1][x]==2: #check if emplacement is clear (replace by 0 in next update)
+                    return (y-1)*blockw,x*blockw
                 else :
                     if i%2==0:
                         y+=1
