@@ -20,8 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c5d0665b-56fb-422c-a048-76dfe285ae37" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/index.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/index.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/index.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/perlinnoise.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/perlinnoise.py" afterDir="false" />
     </list>
@@ -182,6 +183,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="137" y="0" width="1092" height="728" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1613386905558" />
+    <state x="363" y="99" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1613555346125">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="363" y="99" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1366.728@0.0.1366.728" timestamp="1613555346125" />
     <state x="452" y="0" key="#com.jetbrains.python.refactoring.move.PyMoveModuleMembersDialog" timestamp="1613378795065">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -190,22 +195,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="462" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1612795981700" />
-    <state width="1345" height="113" key="GridCell.Tab.0.bottom" timestamp="1613393957425">
+    <state width="1345" height="118" key="GridCell.Tab.0.bottom" timestamp="1613558688456">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="113" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1613393957425" />
-    <state width="1345" height="113" key="GridCell.Tab.0.center" timestamp="1613393957424">
+    <state width="1345" height="118" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1613558688456" />
+    <state width="1345" height="118" key="GridCell.Tab.0.center" timestamp="1613558688455">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="113" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1613393957424" />
-    <state width="1345" height="113" key="GridCell.Tab.0.left" timestamp="1613393957424">
+    <state width="1345" height="118" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1613558688455" />
+    <state width="1345" height="118" key="GridCell.Tab.0.left" timestamp="1613558688455">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="113" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1613393957424" />
-    <state width="1345" height="113" key="GridCell.Tab.0.right" timestamp="1613393957425">
+    <state width="1345" height="118" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1613558688455" />
+    <state width="1345" height="118" key="GridCell.Tab.0.right" timestamp="1613558688456">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="113" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1613393957425" />
+    <state width="1345" height="118" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1613558688456" />
     <state width="1345" height="215" key="GridCell.Tab.1.bottom" timestamp="1613312152989">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

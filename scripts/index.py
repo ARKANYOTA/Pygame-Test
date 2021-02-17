@@ -13,32 +13,15 @@ def randcol():
 def clamp(val, a, b):
     return max(a, min(val, b))
 
-def update_map(map, posy):
-    pass
-    # blkw=blockw
-    # del map[-1]
-    # map.insert(0,[0 for b in range(scrwidth // blockw)])
-    # for i in range(scrwidth // blockw) :
-    #     val = perlin_noise(i/10+0, 1/10+posy)
-    #     val = floor( (val+.5) *5)/5
-    #     val = clamp( (128*(val+1)), 0, 255)
-    #     if 190 < val:
-    #         map[0][i] = 255
-    #     elif 150 < val:
-    #         map[0][i] = 127
-    #     else:
-    #         map[0][i] = 0
-    # for h in range(len(map)) :
-    #     for w in range(len(map[0])) :
-    #         pygame.draw.rect(DISPLAY, (map[h][w], map[h][w], map[h][w]), (w*blkw, h*blkw, blkw, blkw))
-
-
 def main():
     # Pygame & screen setup
     pygame.init()
-    screensize = scrwidth, scrheight = 1100, 700
+    screensize = scrwidth, scrheight = 1280, 640
     screen = pygame.display.set_mode(screensize)
-    DISPLAY = pygame.display.set_mode(screensize, 0, 32)
+    DISPLAY = pygame.display.set_mode(screensize, pygame.RESIZABLE)
+
+#    screen = pygame.display.set_mode(size, RESIZABLE)
+#    pygame.display.set_caption("My Game")
 
     # Textures
 
@@ -54,15 +37,23 @@ def main():
 
     noise.print_perlin_noise(DISPLAY, 0, 0, scrwidth // BLOCKWIDTH, scrheight // BLOCKWIDTH, BLOCKWIDTH)
     while True:
-        screen.fill((0,0,0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.quit()
                 sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pass
 
-        noise.print_perlin_noise(DISPLAY, 0, 0, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH, BLOCKWIDTH)
-        noise.y -= 1
+        screen.fill((0,0,0))
+        # Noise scrolling
+        noiseposy += 5
+        if noiseposy > BLOCKWIDTH:
+            noise.y -= 1
+            noiseposy %= BLOCKWIDTH
+        noise.print_perlin_noise(DISPLAY, 0, noiseposy, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH, BLOCKWIDTH)
+        print(noise.get_noisemap_list())
 
         pygame.display.flip()
-        pygame.time.delay(500)
 
 main()

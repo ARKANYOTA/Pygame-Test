@@ -4,11 +4,13 @@ from random import randint, uniform
 from math import sin, cos, floor
 
 class PerlinNoise:
-    def __init__(self, seed=uniform(-65536, 65535), x=0, y=0, scale=5):
+    def __init__(self, seed=uniform(-65536, 65535), x=0, y=0, scale=5, width=15, height=25):
         self.seed = seed
         self.scale = scale
         self.x = x
         self.y = y
+        self.width = width
+        self.height = height
 
     def smoothstep(self, a0, a1, w):
         #return (a1 - a0) * w + a0; # linear interpolation >> (uglier result but faster)
@@ -60,22 +62,29 @@ class PerlinNoise:
         s1 = self.smoothstep(dot0, dot1, sx)
         val = self.smoothstep(s0, s1, sy)
 
-        return val
+        return (val+1)/2
 
     def clamp(self, val, a, b):
         return max(a, min(val, b))
 
+    def get_noisemap_list(self):
+        li = []
+        for col in range(self.width):
+            li += tuple(self.perlin_noise(col+self.x, row+self.y, self.scale)   for row in range(self.height))
+        return li
+
+
     def print_perlin_noise(self, display, screen_x, screen_y, width, height, blockw):
         # width and neight in blocks
         groundImg = pygame.image.load(r"../textures/dummyGround.png")
+        groundBGImg = pygame.image.load(r"../textures/dummyDecoGround.png")
         for col in range(width):
             for row in range(height):
                 noise = self.perlin_noise(col+self.x, row+self.y, self.scale)
-                noise = (noise + 1) / 2
-                if .7 < noise:
+                if .56 < noise:
                     display.blit(groundImg, (col*blockw + screen_x, row*blockw + screen_y))
-                elif .5 < noise:
-                    pass
+                elif .45 < noise:
+                    display.blit(groundBGImg, (col * blockw + screen_x, row * blockw + screen_y))
                 else:
                     pass
         return True

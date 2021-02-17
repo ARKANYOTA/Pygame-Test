@@ -19,7 +19,6 @@ playerTextures = [player1Texture, player2Texture]
 players = []
 
 
-
 def get_dir():
     return Vector2(1 * pygame.key.get_pressed()[pygame.K_RIGHT] - 1 * pygame.key.get_pressed()[pygame.K_LEFT],
                    1 * pygame.key.get_pressed()[pygame.K_DOWN] - 1 * pygame.key.get_pressed()[pygame.K_UP])
