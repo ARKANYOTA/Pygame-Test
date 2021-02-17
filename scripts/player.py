@@ -7,7 +7,7 @@ class Player:
         self.display =  display
         self.playerNumber = playerNumber
         self.screenPosition = Vector2(x, y)
-        self.position = Vector2(x, y)
+        self.pos = Vector2(x, y)
         self.velocity = Vector2()
         self.width = width
         self.speed = speed
@@ -25,22 +25,22 @@ class Player:
         self.hand = tool
 
     def setposition(self, x, y):
-        self.position = Vector2(x, y)
+        self.pos = Vector2(x, y)
     def setX(self, x):
-        self.position.x = x
+        self.pos.x = x
     def setY(self, y):
-        self.position.y = y
+        self.pos.y = y
     def moveX(self, x):
-        self.position.x += x
+        self.pos.x += x
     def moveY(self, y):
-        self.position.y += y
+        self.pos.y += y
 
     def getposition(self):
-        return self.position
+        return self.pos
     def getX(self):
-        return self.position.x
+        return self.pos.x
     def getY(self):
-        return self.position.y
+        return self.pos.y
 
     def getVelocity(self):
         return self.velocity
@@ -86,11 +86,10 @@ class Player:
                     pass
 
     def update(self, map=0):
-
         self.velocity *= self.slipperiness
         self.velocity += get_input_wasd() * self.speed
-        self.position += self.velocity
-
+        self.pos += self.velocity
+        self.pos.y -= 3
         # if not self.isOnGround(map):
         #     if self.getYVelocity() < 4:
         #         self.addYVelocity(1)

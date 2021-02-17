@@ -7,8 +7,8 @@ class PerlinNoise:
     def __init__(self, seed=uniform(-65536, 65535), x=0, y=0, scale=5, width=15, height=25):
         self.seed = seed
         self.scale = scale
-        self.x = x
-        self.y = y
+        self.pos = Vector2(x, y)
+        self.screenpos = Vector2(0, 0)
         self.width = width
         self.height = height
         self.map = self.get_noisemap_list()
@@ -71,7 +71,7 @@ class PerlinNoise:
     def get_noisemap_list(self):
         li = []
         for row in range(self.height):
-            li.append(tuple(self.perlin_noise(col+self.x, row+self.y, self.scale) for col in range(self.width)))
+            li.append(tuple(self.perlin_noise(col+self.pos.x, row+self.pos.y, self.scale) for col in range(self.width)))
         return li
 
     def update_map(self):
