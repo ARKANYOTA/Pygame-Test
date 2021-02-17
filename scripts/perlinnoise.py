@@ -11,6 +11,7 @@ class PerlinNoise:
         self.y = y
         self.width = width
         self.height = height
+        self.map = self.get_noisemap_list()
 
     def smoothstep(self, a0, a1, w):
         #return (a1 - a0) * w + a0; # linear interpolation >> (uglier result but faster)
@@ -69,18 +70,20 @@ class PerlinNoise:
 
     def get_noisemap_list(self):
         li = []
-        for col in range(self.width):
-            li += tuple(self.perlin_noise(col+self.x, row+self.y, self.scale)   for row in range(self.height))
+        for row in range(self.height):
+            li.append(tuple(self.perlin_noise(col+self.x, row+self.y, self.scale) for col in range(self.width)))
         return li
 
+    def update_map(self):
+        self.map = self.get_noisemap_list()
 
     def print_perlin_noise(self, display, screen_x, screen_y, width, height, blockw):
         # width and neight in blocks
         groundImg = pygame.image.load(r"../textures/dummyGround.png")
         groundBGImg = pygame.image.load(r"../textures/dummyDecoGround.png")
-        for col in range(width):
-            for row in range(height):
-                noise = self.perlin_noise(col+self.x, row+self.y, self.scale)
+        for row in range(self.height):
+            for col in range(self.width):
+                noise = self.map[row][col]
                 if .56 < noise:
                     display.blit(groundImg, (col*blockw + screen_x, row*blockw + screen_y))
                 elif .45 < noise:
@@ -88,3 +91,4 @@ class PerlinNoise:
                 else:
                     pass
         return True
+

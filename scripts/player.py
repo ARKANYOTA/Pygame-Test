@@ -1,76 +1,76 @@
+import pygame
 from vector2 import Vector2
-
+from input import *
 
 class Player:
-    def __init__(self, playerNumber, pygame, display):
+    def __init__(self, display, playerNumber, x=0, y=0, width=32, speed=3, slipperiness=.8):
+        self.display =  display
         self.playerNumber = playerNumber
-        self.location = Vector2()
-        self.yVelocity = 0
-        self.pygame = pygame
-        self.display = display
+        self.screenPosition = Vector2(x, y)
+        self.position = Vector2(x, y)
+        self.velocity = Vector2()
+        self.width = width
+        self.speed = speed
+        self.slipperiness = slipperiness
 
         self.axe = 0
         self.pickaxe = 0
         self.hand = 0
 
-    def setLocation(self, location):
-        self.location = location
-
-    def setX(self, x):
-        self.location.x = x
-
-    def setY(self, y):
-        self.location.y = y
-
-    def setYVelocity(self, yVelocity):
-        self.yVelocity = yVelocity
-
-    def addYVelocity(self, yVelocity):
-        self.yVelocity += yVelocity
-
-    def moveX(self, x):
-        self.location.x += x
-
-    def moveY(self, y):
-        self.location.y += y
-
     def setAxe(self, level):
         self.axe = level
-
     def setPickaxe(self, level):
         self.pickaxe = level
-
     def setHand(self, tool):
         self.hand = tool
 
-    def getLocation(self):
-        return self.location.x, self.location.y
+    def setposition(self, x, y):
+        self.position = Vector2(x, y)
+    def setX(self, x):
+        self.position.x = x
+    def setY(self, y):
+        self.position.y = y
+    def moveX(self, x):
+        self.position.x += x
+    def moveY(self, y):
+        self.position.y += y
 
+    def getposition(self):
+        return self.position
     def getX(self):
-        return self.location.x
-
+        return self.position.x
     def getY(self):
-        return self.location.y
+        return self.position.y
 
+    def getVelocity(self):
+        return self.velocity
+    def getXVelocity(self):
+        return self.velocity.x
     def getYVelocity(self):
-        return self.yVelocity
+        return self.velocity.y
+
+    def addXVelocity(self, yVelocity):
+        self.velocity.x += xVelocity
+    def setXVelocity(self, yVelocity):
+        self.velocity.x = xVelocity
+    def addYVelocity(self, yVelocity):
+        self.velocity.y += yVelocity
+    def setYVelocity(self, yVelocity):
+        self.velocity.y = yVelocity
 
     def getAxe(self):
         return self.axe
-
     def getPickaxe(self):
         return self.pickaxe
-
     def getHand(self):
         return self.hand
-
     def getPlayerNumber(self):
         return self.playerNumber
 
-    def isOnGround(self):
+    def isOnGround(self, map):
+        # TODO: make it not a try:except
         try:
-            return self.display.get_at((self.getX() + 1, self.getY() + 33)) != (0, 0, 0, 255) or \
-                   self.display.get_at((self.getX() + 31, self.getY() + 33)) != (0, 0, 0, 255)
+            return map[(self.y + self.width) // self.width + 1][self.x // self.width] != 0
         except:
             return False
 
@@ -81,28 +81,18 @@ class Player:
                 try:
                     if self.display.get_at((x, y)) == (0, 0, 0, 255) and \
                             self.display.get_at((x, y + 32)) == (246, 195, 143, 255):
-                        self.setLocation(Vector2(x, y))
+                        self.setposition(Vector2(x, y))
                 except:
                     pass
 
-    def update(self):
-        try:
-            if self.pygame.key.get_pressed()[self.pygame.K_d] and \
-                    self.display.get_at((self.getX() + 35, self.getY())) == (0, 0, 0, 255):
-                self.moveX(3)
-            if self.pygame.key.get_pressed()[self.pygame.K_a] and \
-                    self.display.get_at((self.getX() - 3, self.getY())) == (0, 0, 0, 255):
-                self.moveX(-3)
-            if self.pygame.key.get_pressed()[self.pygame.K_w] and self.isOnGround():
-                self.addYVelocity(-35)
-            if self.pygame.key.get_pressed()[self.pygame.K_s]:
-                self.moveY(3)
-            self.moveY(self.getYVelocity())
+    def update(self, map=0):
 
-            if not self.isOnGround():
-                if self.getYVelocity() < 4:
-                    self.addYVelocity(1)
-            else:
-                self.setYVelocity(0)
-        except:
-            pass
+        self.velocity *= self.slipperiness
+        self.velocity += get_input_wasd() * self.speed
+        self.position += self.velocity
+
+        # if not self.isOnGround(map):
+        #     if self.getYVelocity() < 4:
+        #         self.addYVelocity(1)
+        # else:
+        #     self.setYVelocity(0)

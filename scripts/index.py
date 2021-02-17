@@ -40,7 +40,7 @@ def main():
 
     # Game variables
     map = [[0 for k in range(scrwidth)] for i in range(scrheight)]
-    noise = PerlinNoise(SEED, 0, 0, 10)
+    noise = PerlinNoise(SEED, 0, 0, 10, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH)
     groundMovement = 0
     noiseposy = 0
     scale = 10
@@ -48,7 +48,7 @@ def main():
     # Players init
     players = []
 
-    noise.print_perlin_noise(DISPLAY, 0, 0, scrwidth // BLOCKWIDTH, scrheight // BLOCKWIDTH, BLOCKWIDTH)
+    noise.print_perlin_noise(DISPLAY, 0, 0, scrwidth // BLOCKWIDTH, (scrheight // BLOCKWIDTH)+3, BLOCKWIDTH)
     while True:
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
@@ -65,16 +65,16 @@ def main():
         if noiseposy > BLOCKWIDTH:
             noise.y -= 1
             noiseposy %= BLOCKWIDTH
-        noise.print_perlin_noise(DISPLAY, 0, noiseposy, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH, BLOCKWIDTH)
-        print(noise.get_noisemap_list())
+            noise.update_map()
+        noise.print_perlin_noise(DISPLAY, 0, noiseposy-BLOCKWIDTH, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH, BLOCKWIDTH)
 
         if len(players) == 0:
-            players.append(Player(1, pygame, DISPLAY))
+            players.append(Player(DISPLAY, 1, 0, 0))
             players[0].init()
 
         for player in players:
             DISPLAY.blit(playerTextures[player.playerNumber - 1], (player.getX(), player.getY()))
-            player.update()
+            player.update()#noise.get_noisemap_list())
         pygame.display.flip()
 
 
