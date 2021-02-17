@@ -24,7 +24,7 @@ class PerlinNoise:
     def randomGrid(self, ix, iy):
         # Random float. No precomputed gradients mean this works for any number of grid coordinates
         # Readapted from source C code: https://en.wikipedia.org/wiki/Perlin_noise
-        random = 2920.0 * sin(ix * 21942.0 + iy * 171324.0 + 8912.0 + self.seed) * cos(ix * 23157.0 * self.seed * iy * 217832.0 + 9758.0);
+        random = 2920.0 * sin(ix * 21942.0 + iy * 171324.0 + 8912.0 + self.seed) * cos(ix * 23157.0 * self.seed * iy * 217832.0 + 9758.0)
         return Vector2(cos(random), sin(random))
 
     def perlin_noise(self, x, y, scale=1):
@@ -79,8 +79,8 @@ class PerlinNoise:
 
     def print_perlin_noise(self, display, screen_x, screen_y, width, height, blockw):
         # width and neight in blocks
-        groundImg = pygame.image.load(r"../textures/dummyGround.png")
-        groundBGImg = pygame.image.load(r"../textures/dummyDecoGround.png")
+        groundImg = pygame.image.load("textures/dummyGround.png")
+        groundBGImg = pygame.image.load("textures/dummyDecoGround.png")
         for row in range(self.height):
             for col in range(self.width):
                 noise = self.map[row][col]

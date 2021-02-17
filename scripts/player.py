@@ -49,9 +49,9 @@ class Player:
     def getYVelocity(self):
         return self.velocity.y
 
-    def addXVelocity(self, yVelocity):
+    def addXVelocity(self, xVelocity):
         self.velocity.x += xVelocity
-    def setXVelocity(self, yVelocity):
+    def setXVelocity(self, xVelocity):
         self.velocity.x = xVelocity
     def addYVelocity(self, yVelocity):
         self.velocity.y += yVelocity

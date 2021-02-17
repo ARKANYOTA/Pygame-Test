@@ -5,16 +5,15 @@ from player import Player
 from random import randint, uniform
 from math import sin, cos, floor
 from time import sleep
+from input import *
 
 
 def get_dir():
     return Vector2(1 * pygame.key.get_pressed()[pygame.K_RIGHT] - 1 * pygame.key.get_pressed()[pygame.K_LEFT],
                    1 * pygame.key.get_pressed()[pygame.K_DOWN] - 1 * pygame.key.get_pressed()[pygame.K_UP])
 
-
 def randcol():
     return randint(0, 255), randint(0, 255), randint(0, 255)
-
 
 def clamp(val, a, b):
     return max(a, min(val, b))
@@ -30,8 +29,8 @@ def main():
 #    pygame.display.set_caption("My Game")
 
     # Textures
-    player1Texture = pygame.transform.scale(pygame.image.load("../textures/redsquare.png"), (32, 32))
-    player2Texture = pygame.image.load("../textures/intro_ball.gif")
+    player1Texture = pygame.transform.scale(pygame.image.load("textures/redsquare.png"), (32, 32))
+    player2Texture = pygame.image.load("textures/intro_ball.gif")
     playerTextures = [player1Texture, player2Texture]
 
     # Game constants
@@ -39,7 +38,6 @@ def main():
     SEED = uniform(-65536, 65535)
 
     # Game variables
-    map = [[0 for k in range(scrwidth)] for i in range(scrheight)]
     noise = PerlinNoise(SEED, 0, 0, 10, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH)
     groundMovement = 0
     noiseposy = 0
@@ -60,6 +58,7 @@ def main():
                     pass
 
         screen.fill((0,0,0))
+
         # Noise scrolling
         noiseposy += 5
         if noiseposy > BLOCKWIDTH:
@@ -69,8 +68,9 @@ def main():
         noise.print_perlin_noise(DISPLAY, 0, noiseposy-BLOCKWIDTH, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH, BLOCKWIDTH)
 
         if len(players) == 0:
-            players.append(Player(DISPLAY, 1, 0, 0))
+            players.append(Player(DISPLAY, 1, 50, 50))
             players[0].init()
+
 
         for player in players:
             DISPLAY.blit(playerTextures[player.playerNumber - 1], (player.getX(), player.getY()))
