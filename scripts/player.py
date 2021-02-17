@@ -3,7 +3,7 @@ from vector2 import Vector2
 from input import *
 
 class Player:
-    def __init__(self, display, playerNumber, x=0, y=0, width=32, speed=3, slipperiness=.8):
+    def __init__(self, display, playerNumber, x=0, y=0, width=32, speed=0.5, slipperiness=0.9):
         self.display =  display
         self.playerNumber = playerNumber
         self.screenPosition = Vector2(x, y)
@@ -78,6 +78,11 @@ class Player:
         except:
             return False
 
+    def canGoX(self, map):
+        if self.velocity.x :
+            if self.velocity.x>0:
+                return map[int((self.pos.y + self.width))][int(self.pos.x // self.width)] != 2
+
     # def init(self):
     #     for x in range(0, 1100, 32):
     #         for y in range(0, 700, 32):
@@ -95,7 +100,7 @@ class Player:
         self.velocity *= self.slipperiness
         self.velocity.x += get_input_wasd().x * self.speed
         self.pos += self.velocity
-        self.pos.y += SCROLLSPEED
+        canGoX = self.canGoX(map)
 
         self.isGrounded = self.isOnGround(map)
 
@@ -104,11 +109,11 @@ class Player:
 
         # Jumping
         if self.isGrounded and get_input_wasd().y < 0:
-            self.velocity.y = -20
+            self.velocity.y = -15
 
         # Collision
-        if self.isGrounded:
-            self.velocity.y = -2
+        if not self.isGrounded:
+            self.pos.y += SCROLLSPEED
 
         self.pos += self.velocity
         # if not self.isOnGround(map):
