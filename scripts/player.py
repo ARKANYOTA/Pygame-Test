@@ -70,20 +70,20 @@ class Player:
     def isOnGround(self, map):
         # TODO: make it not a try:except
         try:
-            return map[(self.y + self.width) // self.width + 1][self.x // self.width] != 0
+            return map[(self.pos.y + self.width) // self.width + 1][self.pos.x // self.width] != 0
         except:
             return False
 
-    def init(self):
-        for x in range(0, 1100, 32):
-            for y in range(0, 700, 32):
-                # print("X=" + str(x) + " && Y=" + str(y) + ":", display.get_at((x, y)))
-                try:
-                    if self.display.get_at((x, y)) == (0, 0, 0, 255) and \
-                            self.display.get_at((x, y + 32)) == (246, 195, 143, 255):
-                        self.setposition(Vector2(x, y))
-                except:
-                    pass
+    # def init(self):
+    #     for x in range(0, 1100, 32):
+    #         for y in range(0, 700, 32):
+    #             # print("X=" + str(x) + " && Y=" + str(y) + ":", display.get_at((x, y)))
+    #             try:
+    #                 if self.display.get_at((x, y)) == (0, 0, 0, 255) and \
+    #                         self.display.get_at((x, y + 32)) == (246, 195, 143, 255):
+    #                     self.setposition(Vector2(x, y))
+    #             except:
+    #                 pass
 
     def update(self, map=0):
         self.velocity *= self.slipperiness

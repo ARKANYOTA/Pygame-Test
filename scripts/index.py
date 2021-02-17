@@ -61,8 +61,10 @@ def main():
         noise.print_perlin_noise(DISPLAY, 0, noise.screenpos.y-BLOCKWIDTH, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH, BLOCKWIDTH)
 
         if len(players) == 0:
-            players.append(Player(DISPLAY, 1, 50, 50))
-            players[0].init()
+            playerposinit = noise.find_empty_xy(BLOCKWIDTH)
+            print(playerposinit)
+            players.append(Player(DISPLAY, 1, playerposinit[1], playerposinit[0]))
+            #players[0].init()
 
 
         for player in players:
