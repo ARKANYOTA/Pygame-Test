@@ -1,6 +1,7 @@
 import pygame,sys
 from vector2 import Vector2
 from input import *
+from math import floor
 
 class Player:
     def __init__(self, display, playerNumber, x=0, y=0, width=32, speed=0.5, slipperiness=0.9):
@@ -70,8 +71,8 @@ class Player:
 
     def isOnGround(self, map):
         # TODO: make it not a try:except C'est fait bg
-        i = int((self.pos.y + self.width) // self.width + 1)
-        j = int(self.pos.x // self.width)
+        i = int((self.pos.y + self.width) // self.width)
+        j = floor(self.pos.x/self.width)
         if i< len(map):
             return map[i][j] == 2
         else :
@@ -103,32 +104,33 @@ class Player:
             #pygame.quit()
             #sys.exit()
 
-        SCROLLSPEED = 0
+        SCROLLSPEED = 0.5
 
-        self.velocity *= self.slipperiness
+        self.velocity.x *= self.slipperiness
         self.velocity.x += get_input_wasd().x * self.speed
         cannotGoX = self.cannotGoX(map)
-        print(cannotGoX)
+        #print(cannotGoX, self.velocity.x)
         if cannotGoX or -0.01<self.velocity.x<0.01:
             self.velocity.x=0
-        #self.pos += self.velocity
-        print(self.velocity.x)
 
         self.isGrounded = self.isOnGround(map)
-
-        #Scroll
-        self.pos.y += SCROLLSPEED
+        print(self.isGrounded)
         # Gravity & velocity
-        self.velocity.y += 0.5
+        self.velocity.y += 0.4
         # Collision
         if self.isGrounded:
             self.velocity.y = 0
+            #if self.pos.y%self.width !=0 :
+            #    self.pos.y = floor(self.pos.y/self.width)*self.width
 
         # Jumping
         if self.isGrounded and get_input_wasd().y < 0:
-            self.velocity.y = -15
+            self.velocity.y = -17
 
         self.pos += self.velocity
+        #Scroll
+        self.pos.y += SCROLLSPEED
+        
         # if not self.isOnGround(map):
         #     if self.getYVelocity() < 4:
         #         self.addYVelocity(1)

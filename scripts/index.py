@@ -4,7 +4,6 @@ from perlinnoise import *
 from player import Player
 from random import randint, uniform
 from math import sin, cos, floor
-from time import sleep
 from input import *
 
 
@@ -28,7 +27,7 @@ def main():
     # Game variables
     noise = PerlinNoise(SEED, 0, 0, 10, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH+1)
     #camera = Vector2()
-    scrollspeed = 3
+    scrollspeed = 0.5
 
     # Players init
     players = []
@@ -44,7 +43,8 @@ def main():
                     sys.exit()
 
         # Noise scrolling
-        #noise.screenpos.y += scrollspeed
+        noise.screenpos.y += scrollspeed
+
         if noise.screenpos.y > BLOCKWIDTH:
             noise.pos.y -= 1
             noise.screenpos.y %= BLOCKWIDTH
@@ -53,7 +53,6 @@ def main():
 
         if len(players) == 0:
             playerposinit = noise.find_empty_xy(BLOCKWIDTH)
-            print(playerposinit)
             players.append(Player(DISPLAY, 1, playerposinit[1], playerposinit[0]))
 
 
