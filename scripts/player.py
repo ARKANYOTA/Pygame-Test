@@ -98,9 +98,9 @@ class Player:
 
     def update(self, map):
 
-        if self.pos.y//self.width>len(map):
-            pygame.quit()
-            sys.exit()
+        #if self.pos.y//self.width>len(map):
+            #pygame.quit()
+            #sys.exit()
 
         SCROLLSPEED = 0
 
@@ -127,7 +127,7 @@ class Player:
         # Collision
         if not self.isGrounded:
             self.velocity.y += 2
-            
+
         self.pos += self.velocity
         # if not self.isOnGround(map):
         #     if self.getYVelocity() < 4:

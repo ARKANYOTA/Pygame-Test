@@ -40,6 +40,7 @@ def main():
     players = []
     print("Ca marche askip mais la deuxième fois")
     while True:
+        DISPLAY.fill(0,0,0)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
