@@ -1,4 +1,4 @@
-import pygame
+import pygame,sys
 from vector2 import Vector2
 from input import *
 
@@ -69,19 +69,21 @@ class Player:
         return self.playerNumber
 
     def isOnGround(self, map):
-        # TODO: make it not a try:except
-        try:
-            i = int((self.pos.y + self.width) // self.width + 1)
-            j = int(self.pos.x // self.width)
-            #print(map[i][j])
+        # TODO: make it not a try:except C'est fait bg
+        i = int((self.pos.y + self.width) // self.width + 1)
+        j = int(self.pos.x // self.width)
+        if map[i]:
             return map[i][j] == 2
-        except:
+        else :
             return False
 
-    def canGoX(self, map):
+    def cannotGoX(self, map):
         if self.velocity.x :
             if self.velocity.x>0:
-                return map[int((self.pos.y + self.width))][int(self.pos.x // self.width)] != 2
+                return map[int(self.pos.y//self.width)][int((self.pos.y+self.width)//self.width)] == 2
+            elif self.velocity.x<0:
+                return map[int(self.pos.y//self.width)][int((self.pos.y-self.width)//self.width)] == 2
+        return False
 
     # def init(self):
     #     for x in range(0, 1100, 32):
@@ -95,14 +97,23 @@ class Player:
     #                 pass
 
     def update(self, map):
+
+        if self.pos.y//self.width>len(map):
+            pygame.quit()
+            sys.exit()
+
         SCROLLSPEED = 3
 
         self.velocity *= self.slipperiness
         self.velocity.x += get_input_wasd().x * self.speed
         self.pos += self.velocity
-        canGoX = self.canGoX(map)
+        cannotGoX = self.cannotGoX(map)
+
+        if cannotGoX :
+            self.velocity.x=0
 
         self.isGrounded = self.isOnGround(map)
+        print(self.isGrounded)
 
         # Gravity & velocity
         #self.velocity.y += 2
