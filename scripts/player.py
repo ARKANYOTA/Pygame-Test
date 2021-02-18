@@ -72,7 +72,7 @@ class Player:
         # TODO: make it not a try:except C'est fait bg
         i = int((self.pos.y + self.width) // self.width + 1)
         j = int(self.pos.x // self.width)
-        if map[i]:
+        if i< len(map):
             return map[i][j] == 2
         else :
             return False
@@ -108,25 +108,23 @@ class Player:
         self.velocity.x += get_input_wasd().x * self.speed
         self.pos += self.velocity
         cannotGoX = self.cannotGoX(map)
-
+        print(self.isGrounded)
         if cannotGoX :
             self.velocity.x=0
 
         self.isGrounded = self.isOnGround(map)
-        print(self.isGrounded)
-
-        # Gravity & velocity
-        #self.velocity.y += 2
 
         # Jumping
         if self.isGrounded and get_input_wasd().y < 0:
             self.velocity.y = -15
 
+        #Scroll
         self.pos.y += SCROLLSPEED
-
+        # Gravity & velocity
+        self.velocity.y += 2
         # Collision
         if not self.isGrounded:
-            self.velocity.y += 2
+            self.velocity.y = 0
 
         self.pos += self.velocity
         # if not self.isOnGround(map):
