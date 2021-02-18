@@ -102,7 +102,7 @@ class Player:
             pygame.quit()
             sys.exit()
 
-        SCROLLSPEED = 3
+        SCROLLSPEED = 0
 
         self.velocity *= self.slipperiness
         self.velocity.x += get_input_wasd().x * self.speed
@@ -122,10 +122,12 @@ class Player:
         if self.isGrounded and get_input_wasd().y < 0:
             self.velocity.y = -15
 
+        self.pos.y += SCROLLSPEED
+
         # Collision
         if not self.isGrounded:
-            self.pos.y += SCROLLSPEED
-
+            self.velocity.y += 2
+            
         self.pos += self.velocity
         # if not self.isOnGround(map):
         #     if self.getYVelocity() < 4:
