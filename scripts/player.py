@@ -78,11 +78,12 @@ class Player:
             return False
 
     def cannotGoX(self, map):
-        if self.velocity.x :
+        i = int(self.pos.y//self.width)
+        if self.velocity.x and i<len(map):
             if self.velocity.x>0:
-                return map[int(self.pos.y//self.width)][int((self.pos.y+self.width)//self.width)] == 2
+                return map[i][int((self.pos.y-self.width)//self.width)] == 2
             elif self.velocity.x<0:
-                return map[int(self.pos.y//self.width)][int((self.pos.y-self.width)//self.width)] == 2
+                return map[i][int((self.pos.y+self.width)//self.width)] == 2
         return False
 
     # def init(self):
@@ -106,25 +107,26 @@ class Player:
 
         self.velocity *= self.slipperiness
         self.velocity.x += get_input_wasd().x * self.speed
-        self.pos += self.velocity
         cannotGoX = self.cannotGoX(map)
-        print(self.isGrounded)
-        if cannotGoX :
+        print(cannotGoX)
+        if cannotGoX or -0.01<self.velocity.x<0.01:
             self.velocity.x=0
+        #self.pos += self.velocity
+        print(self.velocity.x)
 
         self.isGrounded = self.isOnGround(map)
-
-        # Jumping
-        if self.isGrounded and get_input_wasd().y < 0:
-            self.velocity.y = -15
 
         #Scroll
         self.pos.y += SCROLLSPEED
         # Gravity & velocity
-        self.velocity.y += 2
+        self.velocity.y += 0.5
         # Collision
-        if not self.isGrounded:
+        if self.isGrounded:
             self.velocity.y = 0
+
+        # Jumping
+        if self.isGrounded and get_input_wasd().y < 0:
+            self.velocity.y = -15
 
         self.pos += self.velocity
         # if not self.isOnGround(map):

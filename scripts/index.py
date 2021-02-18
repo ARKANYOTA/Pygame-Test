@@ -7,25 +7,19 @@ from math import sin, cos, floor
 from time import sleep
 from input import *
 
-def randcol():
-    return randint(0, 255), randint(0, 255), randint(0, 255)
-
-def clamp(val, a, b):
-    return max(a, min(val, b))
 
 def main():
-    print("Ca marche askip")
+
     # Pygame & screen setup
     pygame.init()
     print("Ca marche askip bis")
     screensize = scrwidth, scrheight = 1280, 640
     DISPLAY = pygame.display.set_mode(screensize, pygame.RESIZABLE)
-#    pygame.display.set_caption("My Game")
+    #pygame.display.set_caption("My Game")
 
     # Textures
     player1Texture = pygame.transform.scale(pygame.image.load("textures/redsquare.png"), (32, 32))
-    player2Texture = pygame.image.load("textures/intro_ball.gif")
-    playerTextures = [player1Texture, player2Texture]
+    playerTextures = [player1Texture]
 
     # Game constants
     BLOCKWIDTH = 32
@@ -33,12 +27,11 @@ def main():
 
     # Game variables
     noise = PerlinNoise(SEED, 0, 0, 10, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH+1)
-    camera = Vector2()
+    #camera = Vector2()
     scrollspeed = 3
 
     # Players init
     players = []
-    print("Ca marche askip mais la deuxième fois")
     while True:
         DISPLAY.fill((0,0,0))
         for event in pygame.event.get():
@@ -62,7 +55,6 @@ def main():
             playerposinit = noise.find_empty_xy(BLOCKWIDTH)
             print(playerposinit)
             players.append(Player(DISPLAY, 1, playerposinit[1], playerposinit[0]))
-            #players[0].init()
 
 
         for player in players:
