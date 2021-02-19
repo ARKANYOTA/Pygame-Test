@@ -11,7 +11,6 @@ def main():
 
     # Pygame & screen setup
     pygame.init()
-    print("Ca marche askip bis")
     screensize = scrwidth, scrheight = 1280, 640
     DISPLAY = pygame.display.set_mode(screensize, pygame.RESIZABLE)
     #pygame.display.set_caption("My Game")
@@ -53,7 +52,7 @@ def main():
 
         if len(players) == 0:
             playerposinit = noise.find_empty_xy(BLOCKWIDTH)
-            players.append(Player(DISPLAY, 1, playerposinit[1], playerposinit[0]))
+            players.append(Player(DISPLAY, 1, playerposinit[1], playerposinit[0], scrollspeed))
 
 
         for player in players:
