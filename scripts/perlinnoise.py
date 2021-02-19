@@ -89,17 +89,11 @@ class PerlinNoise:
     def update_map(self):
         self.map = self.get_noisemap_list()
 
-    def print_perlin_noise(self, display, screen_x, screen_y, width, height, blockw):
-        # width and neight in blocks
+    def print_perlin_noise(self, display, screen_x, screen_y, blockwidth, tileTextures):
         for row in range(self.height):
             for col in range(self.width):
                 noise = self.map[row][col]
-                if noise == 2:
-                    display.blit(self.groundImg, (col*blockw + screen_x, row*blockw + screen_y))
-                elif noise == 1:
-                    display.blit(self.groundBGImg, (col * blockw + screen_x, row * blockw + screen_y))
-                else:
-                    pass
+                display.blit(tileTextures[noise], (col*blockwidth + screen_x, row*blockwidth + screen_y))
         return True
 
     def find_empty_xy(self, blockw):
