@@ -1,7 +1,7 @@
 from math import sqrt
 class Vector2:
     def __init__(self, x=0, y=0):
-        self.xy = self.x, self.y = x, y
+        self.x, self.y = x, y
     def __add__(self, v):
         return Vector2(self.x + v.x, self.y + v.y)
     def __iadd__(self, other):
@@ -40,3 +40,5 @@ class Vector2:
         return self.x * self.x + self.y * self.y
     def dot(self, v):
         return self.x * v.x + self.y * v.y
+    def get_tuple(self):
+        return (self.x, self.y)

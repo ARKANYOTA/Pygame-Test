@@ -1,0 +1,8 @@
+from vector2 import Vector2
+from random import uniform
+
+SCREENSIZE = SCRWIDTH, SCRHEIGHT = 1280, 640
+BLOCKWIDTH = 32
+BLOCKWIDTH_2TUPLE = (BLOCKWIDTH, BLOCKWIDTH)
+SEED = uniform(-65536, 65535)
+BACKGROUNDCOLOR = (0x29, 0x24, 0x1a)

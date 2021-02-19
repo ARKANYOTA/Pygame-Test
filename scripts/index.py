@@ -5,45 +5,41 @@ from player import Player
 from random import randint, uniform
 from math import sin, cos, floor
 from input import *
-
+from background import *
+from constants import *
 
 def main():
 
     # Pygame & screen setup
     pygame.init()
     print("Ca marche askip bis")
-    screensize = scrwidth, scrheight = 1280, 640
     DISPLAY = pygame.display.set_mode(screensize, pygame.RESIZABLE)
-    #pygame.display.set_caption("My Game")
-
-    # Textures
-    player1Texture = pygame.transform.scale(pygame.image.load("textures/redsquare.png"), (32, 32))
-    playerTextures = [player1Texture]
 
     # Game constants
-    BLOCKWIDTH = 32
-    BLOCKWIDTH_2TUPLE = (BLOCKWIDTH, BLOCKWIDTH)
-    SEED = uniform(-65536, 65535)
+    # Moved to file: constants.py
 
     # Textures
     player1Texture = pygame.transform.scale(pygame.image.load("../textures/redsquare.png"), (32, 32))
+    playerTextures = [player1Texture]
+    player1Texture = pygame.transform.scale(pygame.image.load("../textures/redsquare.png"), (32, 32))
     player2Texture = pygame.image.load("../textures/intro_ball.gif")
     playerTextures = [player1Texture, player2Texture]
-    
+
     groundTexture = pygame.transform.scale(pygame.image.load("../textures/groundTile.png"), BLOCKWIDTH_2TUPLE)
     groundBGTexture = pygame.transform.scale(pygame.image.load("../textures/dummyDecoGround.png"), BLOCKWIDTH_2TUPLE)
     blankTexture = pygame.transform.scale(pygame.image.load("../textures/blank.png"), BLOCKWIDTH_2TUPLE)
     tileTextures = [blankTexture, groundBGTexture, groundTexture]
 
-    # Game variables
+    backgroundTexture = pygame.transform.scale(pygame.image.load("../textures/background_cave.png"), (scrwidth, 2000))
+
+    # Game variables and classes
     noise = PerlinNoise(SEED, 0, 0, 10, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH+1)
-    #camera = Vector2()
-    scrollspeed = 0.5
+    background = Background(backgroundTexture, 0.6)
+    scrollspeed = 5
 
     # Players init
     players = []
     while True:
-        DISPLAY.fill((0,0,0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -53,9 +49,13 @@ def main():
                     pygame.quit()
                     sys.exit()
 
+        DISPLAY.fill(BACKGROUNDCOLOR)
+
         # Noise scrolling
         # TODO: move to seperate update method
         noise.screenpos.y += scrollspeed
+        background.scroll(scrollspeed)
+        background.render(DISPLAY)
 
         if noise.screenpos.y > BLOCKWIDTH:
             noise.pos.y -= 1
