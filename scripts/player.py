@@ -18,6 +18,7 @@ class Player:
         self.axe = 0
         self.pickaxe = 0
         self.hand = 0
+        self.lastDirection = 0  # 0 = Rien, 1= Droite, -1=Gauche
 
     def setAxe(self, level):
         self.axe = level
@@ -89,6 +90,12 @@ class Player:
                 return map[i][int((self.pos.y-self.width)//self.width)] == 2
         return False
 
+    def tryMining(self, map):
+        pass
+        # TODO: Detection si y a un block avec self.lastDirection
+        # TODO Si y a block le casser et le mettre dans l'inv
+
+        
     def update(self, map):
 
         #if self.pos.y//self.width>len(map):
@@ -101,6 +108,10 @@ class Player:
         #print(cannotGoX, self.velocity.x)
         if cannotGoX or -0.01<self.velocity.x<0.01:
             self.velocity.x=0
+            if self.velocity.x<0:
+                self.lastDirection = -1
+            if self.velocity.x>0:
+                self.lastDirection = 1
 
         self.isGrounded = self.isOnGround(map)
         #print(self.isGrounded)
@@ -119,6 +130,10 @@ class Player:
         self.pos += self.velocity
         #Scroll
         self.pos.y += self.scrollspeed
+
+        # MINING
+        if get_input_space():
+            self.tryMining()
 
         #if self.isGrounded and self.pos.y%self.width !=0 :
         #    self.pos.y = floor(self.pos.y/self.width)*self.width

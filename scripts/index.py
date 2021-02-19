@@ -13,7 +13,7 @@ def main():
     pygame.init()
     screensize = scrwidth, scrheight = 1280, 640
     DISPLAY = pygame.display.set_mode(screensize, pygame.RESIZABLE)
-    #pygame.display.set_caption("My Game")
+    pygame.display.set_caption("ChawserofGold")
 
     # Game constants
     BLOCKWIDTH = 32
