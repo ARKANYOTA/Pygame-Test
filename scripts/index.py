@@ -20,11 +20,7 @@ def main():
 
     # Textures
     player1Texture = pygame.transform.scale(pygame.image.load("../textures/redsquare.png"), (32, 32))
-    playerTextures = [player1Texture]
-    player1Texture = pygame.transform.scale(pygame.image.load("../textures/redsquare.png"), (32, 32))
-    player2Texture = pygame.image.load("../textures/intro_ball.gif")
-    playerTextures = [player1Texture, player2Texture]
-
+    playerTextures = [player1Texture, player1Texture]
     groundTexture = pygame.transform.scale(pygame.image.load("../textures/groundTile.png"), BLOCKWIDTH_2TUPLE)
     groundBGTexture = pygame.transform.scale(pygame.image.load("../textures/dummyDecoGround.png"), BLOCKWIDTH_2TUPLE)
     blankTexture = pygame.transform.scale(pygame.image.load("../textures/blank.png"), BLOCKWIDTH_2TUPLE)
@@ -36,6 +32,7 @@ def main():
     noise = PerlinNoise(SEED, 0, 0, 10, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH+1)
     background = Background(backgroundTexture, 0.6)
     scrollspeed = 5
+    noise.create_noisemap_list()
 
     # Players init
     players = []
@@ -65,7 +62,7 @@ def main():
 
         if len(players) == 0:
             playerposinit = noise.find_empty_xy(BLOCKWIDTH)
-            players.append(Player(DISPLAY, 1, playerposinit[1], playerposinit[0]))
+            players.append(Player(DISPLAY, 1, playerposinit[1], playerposinit[0], scrollspeed))
 
         for player in players:
             DISPLAY.blit(playerTextures[player.playerNumber - 1], (player.pos.x, player.pos.y))

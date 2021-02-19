@@ -4,7 +4,7 @@ from input import *
 from math import floor
 
 class Player:
-    def __init__(self, display, playerNumber, x=0, y=0, width=32, speed=0.5, slipperiness=0.9):
+    def __init__(self, display, playerNumber, x=0, y=0, scrollspeed=0.5, width=32, speed=0.5, slipperiness=0.9):
         self.display =  display
         self.playerNumber = playerNumber
         self.screenPosition = Vector2(x, y)
@@ -13,7 +13,7 @@ class Player:
         self.width = width
         self.speed = speed
         self.slipperiness = slipperiness
-
+        self.scrollspeed = scrollspeed
         self.isGrounded = False
         self.axe = 0
         self.pickaxe = 0
@@ -71,32 +71,24 @@ class Player:
 
     def isOnGround(self, map):
         # TODO: make it not a try:except C'est fait bg
-        i = int((self.pos.y + self.width) // self.width)
+        i = floor((self.pos.y+self.width)/self.width)
         j = floor(self.pos.x/self.width)
-        if i< len(map):
-            return map[i][j] == 2
+        if i+1<len(map):
+            #print(i, j, map[i][j])
+            return map[i+1][j] == 2
         else :
             return False
 
     def cannotGoX(self, map):
-        i = int(self.pos.y//self.width)
+        i =  floor((self.pos.y+self.width)/self.width)
         if self.velocity.x and i<len(map):
             if self.velocity.x>0:
-                return map[i][int((self.pos.y-self.width)//self.width)] == 2
+                print(i,int((self.pos.y+self.width+self.width)//self.width), map[i][int((self.pos.y+self.width+self.width)//self.width)])
+                return map[i][int((self.pos.y+self.width+self.width)//self.width)] == 2
             elif self.velocity.x<0:
-                return map[i][int((self.pos.y+self.width)//self.width)] == 2
+                print(i,int((self.pos.y)//self.width) ,map[i][int((self.pos.y)//self.width)])
+                return map[i][int((self.pos.y)//self.width)] == 2
         return False
-
-    # def init(self):
-    #     for x in range(0, 1100, 32):
-    #         for y in range(0, 700, 32):
-    #             # print("X=" + str(x) + " && Y=" + str(y) + ":", display.get_at((x, y)))
-    #             try:
-    #                 if self.display.get_at((x, y)) == (0, 0, 0, 255) and \
-    #                         self.display.get_at((x, y + 32)) == (246, 195, 143, 255):
-    #                     self.setposition(Vector2(x, y))
-    #             except:
-    #                 pass
 
     def update(self, map):
 
@@ -104,17 +96,15 @@ class Player:
             #pygame.quit()
             #sys.exit()
 
-        SCROLLSPEED = 0.5
-
         self.velocity.x *= self.slipperiness
         self.velocity.x += get_input_wasd().x * self.speed
         cannotGoX = self.cannotGoX(map)
-        #print(cannotGoX, self.velocity.x)
+        print(cannotGoX)
         if cannotGoX or -0.01<self.velocity.x<0.01:
             self.velocity.x=0
 
         self.isGrounded = self.isOnGround(map)
-        print(self.isGrounded)
+        #print(self.isGrounded)
         # Gravity & velocity
         self.velocity.y += 0.4
         # Collision
@@ -129,10 +119,26 @@ class Player:
 
         self.pos += self.velocity
         #Scroll
-        self.pos.y += SCROLLSPEED
+        self.pos.y += self.scrollspeed
+
+        #if self.isGrounded and self.pos.y%self.width !=0 :
+        #    self.pos.y = floor(self.pos.y/self.width)*self.width
+
         
         # if not self.isOnGround(map):
         #     if self.getYVelocity() < 4:
         #         self.addYVelocity(1)
         # else:
         #     self.setYVelocity(0)
+
+
+    # def init(self):
+    #     for x in range(0, 1100, 32):
+    #         for y in range(0, 700, 32):
+    #             # print("X=" + str(x) + " && Y=" + str(y) + ":", display.get_at((x, y)))
+    #             try:
+    #                 if self.display.get_at((x, y)) == (0, 0, 0, 255) and \
+    #                         self.display.get_at((x, y + 32)) == (246, 195, 143, 255):
+    #                     self.setposition(Vector2(x, y))
+    #             except:
+    #                 pass
