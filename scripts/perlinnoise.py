@@ -11,7 +11,7 @@ class PerlinNoise:
         self.screenpos = Vector2(0, 0)
         self.width = width
         self.height = height
-        self.map = self.get_noisemap_list()
+        self.map = []
         self.groundImg = pygame.image.load("textures/dummyGround.png")
         self.groundBGImg = pygame.image.load("textures/dummyDecoGround.png")
 
@@ -70,7 +70,7 @@ class PerlinNoise:
     def clamp(self, val, a, b):
         return max(a, min(val, b))
 
-    def get_noisemap_list(self):
+    def create_noisemap_list(self):
         li = [[0] * self.width] * self.height
         for row in range(self.height):
             li2 = [0] * self.width
@@ -84,10 +84,22 @@ class PerlinNoise:
                     noise = 0
                 li2[col] = noise
             li[row] = li2
-        return li
+        self.map = li
 
     def update_map(self):
-        self.map = self.get_noisemap_list()
+        del self.map[-1]
+        li2 = [0] * self.width
+        for col in range(self.width):
+            noise = self.perlin_noise(col+self.pos.x, 0+self.pos.y, self.scale)
+            if .56 < noise:
+                noise = 2
+            elif .45 < noise:
+                noise = 1
+            else:
+                noise = 0
+            li2[col] = noise
+        self.map.insert(0,li2)
+
 
     def print_perlin_noise(self, display, screen_x, screen_y, blockwidth, tileTextures):
         for row in range(self.height):

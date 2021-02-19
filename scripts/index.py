@@ -25,17 +25,18 @@ def main():
     SEED = uniform(-65536, 65535)
 
     # Textures
-    player1Texture = pygame.transform.scale(pygame.image.load("../textures/redsquare.png"), (32, 32))
-    player2Texture = pygame.image.load("../textures/intro_ball.gif")
+    player1Texture = pygame.transform.scale(pygame.image.load("textures/redsquare.png"), (32, 32))
+    player2Texture = pygame.image.load("textures/intro_ball.gif")
     playerTextures = [player1Texture, player2Texture]
     
-    groundTexture = pygame.transform.scale(pygame.image.load("../textures/groundTile.png"), BLOCKWIDTH_2TUPLE)
-    groundBGTexture = pygame.transform.scale(pygame.image.load("../textures/dummyDecoGround.png"), BLOCKWIDTH_2TUPLE)
-    blankTexture = pygame.transform.scale(pygame.image.load("../textures/blank.png"), BLOCKWIDTH_2TUPLE)
+    groundTexture = pygame.transform.scale(pygame.image.load("textures/groundTile.png"), BLOCKWIDTH_2TUPLE)
+    groundBGTexture = pygame.transform.scale(pygame.image.load("textures/dummyDecoGround.png"), BLOCKWIDTH_2TUPLE)
+    blankTexture = pygame.transform.scale(pygame.image.load("textures/blank.png"), BLOCKWIDTH_2TUPLE)
     tileTextures = [blankTexture, groundBGTexture, groundTexture]
 
     # Game variables
     noise = PerlinNoise(SEED, 0, 0, 10, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH+1)
+    noise.create_noisemap_list()
     #camera = Vector2()
     scrollspeed = 0.5
 

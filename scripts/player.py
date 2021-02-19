@@ -89,17 +89,6 @@ class Player:
                 return map[i][int((self.pos.y-self.width)//self.width)] == 2
         return False
 
-    # def init(self):
-    #     for x in range(0, 1100, 32):
-    #         for y in range(0, 700, 32):
-    #             # print("X=" + str(x) + " && Y=" + str(y) + ":", display.get_at((x, y)))
-    #             try:
-    #                 if self.display.get_at((x, y)) == (0, 0, 0, 255) and \
-    #                         self.display.get_at((x, y + 32)) == (246, 195, 143, 255):
-    #                     self.setposition(Vector2(x, y))
-    #             except:
-    #                 pass
-
     def update(self, map):
 
         #if self.pos.y//self.width>len(map):
@@ -131,8 +120,8 @@ class Player:
         #Scroll
         self.pos.y += self.scrollspeed
 
-        if self.isGrounded and self.pos.y%self.width !=0 :
-            self.pos.y = floor(self.pos.y/self.width)*self.width
+        #if self.isGrounded and self.pos.y%self.width !=0 :
+        #    self.pos.y = floor(self.pos.y/self.width)*self.width
 
         
         # if not self.isOnGround(map):
@@ -140,3 +129,15 @@ class Player:
         #         self.addYVelocity(1)
         # else:
         #     self.setYVelocity(0)
+
+
+    # def init(self):
+    #     for x in range(0, 1100, 32):
+    #         for y in range(0, 700, 32):
+    #             # print("X=" + str(x) + " && Y=" + str(y) + ":", display.get_at((x, y)))
+    #             try:
+    #                 if self.display.get_at((x, y)) == (0, 0, 0, 255) and \
+    #                         self.display.get_at((x, y + 32)) == (246, 195, 143, 255):
+    #                     self.setposition(Vector2(x, y))
+    #             except:
+    #                 pass
