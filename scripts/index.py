@@ -15,10 +15,6 @@ def main():
     DISPLAY = pygame.display.set_mode(screensize, pygame.RESIZABLE)
     #pygame.display.set_caption("My Game")
 
-    # Textures
-    player1Texture = pygame.transform.scale(pygame.image.load("textures/redsquare.png"), (32, 32))
-    playerTextures = [player1Texture]
-
     # Game constants
     BLOCKWIDTH = 32
     BLOCKWIDTH_2TUPLE = (BLOCKWIDTH, BLOCKWIDTH)
@@ -26,9 +22,7 @@ def main():
 
     # Textures
     player1Texture = pygame.transform.scale(pygame.image.load("textures/redsquare.png"), (32, 32))
-    player2Texture = pygame.image.load("textures/intro_ball.gif")
-    playerTextures = [player1Texture, player2Texture]
-    
+    playerTextures = [player1Texture, player1Texture]
     groundTexture = pygame.transform.scale(pygame.image.load("textures/groundTile.png"), BLOCKWIDTH_2TUPLE)
     groundBGTexture = pygame.transform.scale(pygame.image.load("textures/dummyDecoGround.png"), BLOCKWIDTH_2TUPLE)
     blankTexture = pygame.transform.scale(pygame.image.load("textures/blank.png"), BLOCKWIDTH_2TUPLE)
