@@ -14,14 +14,13 @@ def clamp(val, a, b):
     return max(a, min(val, b))
 
 def main():
+    print("Ca marche askip")
     # Pygame & screen setup
     pygame.init()
+    print("Ca marche askip bis")
     screensize = scrwidth, scrheight = 1280, 640
-    screen = pygame.display.set_mode(screensize)
-    DISPLAY = pygame.display.set_mode(screensize, pygame.RESIZABLE)
-
-#    screen = pygame.display.set_mode(size, RESIZABLE)
-#    pygame.display.set_caption("My Game")
+    DISPLAY = pygame.display.set_mode(screensize)
+    pygame.display.set_caption("Multiplayer Pygame Game")
 
     # Game constants
     BLOCKWIDTH = 32
@@ -29,7 +28,7 @@ def main():
     SEED = uniform(-65536, 65535)
 
     # Textures
-    player1Texture = pygame.transform.scale(pygame.image.load("../textures/redsquare.png"), BLOCKWIDTH_2TUPLE)
+    player1Texture = pygame.transform.scale(pygame.image.load("../textures/redsquare.png"), (32, 32))
     player2Texture = pygame.image.load("../textures/intro_ball.gif")
     playerTextures = [player1Texture, player2Texture]
     
@@ -45,9 +44,9 @@ def main():
 
     # Players init
     players = []
-
+    print("Ca marche askip mais la deuxième fois")
     while True:
-        screen.fill((0, 0, 0))
+        DISPLAY.fill((0,0,0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -56,8 +55,6 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
-
-        screen.fill((0,0,0))
 
         # Noise scrolling
         #noise.screenpos.y += scrollspeed
