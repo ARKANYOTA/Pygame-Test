@@ -12,8 +12,8 @@ class PerlinNoise:
         self.width = width
         self.height = height
         self.map = []
-        self.groundImg = pygame.image.load("textures/dummyGround.png")
-        self.groundBGImg = pygame.image.load("textures/dummyDecoGround.png")
+        self.groundImg = pygame.image.load("../textures/dummyGround.png")
+        self.groundBGImg = pygame.image.load("../textures/dummyDecoGround.png")
 
     def smoothstep(self, a0, a1, w):
         #return (a1 - a0) * w + a0; # linear interpolation >> (uglier result but faster)

@@ -72,22 +72,23 @@ class Player:
 
     def isOnGround(self, map):
         # TODO: make it not a try:except C'est fait bg
-        i = floor((self.pos.y + self.width) / self.width)
+        i = floor((self.pos.y+self.width)/self.width)
         j = floor(self.pos.x/self.width)
-        if i< len(map):
-            return map[i][j] == 2
+        if i+1<len(map):
+            #print(i, j, map[i][j])
+            return map[i+1][j] == 2
         else :
             return False
 
     def cannotGoX(self, map):
-        i =  floor(self.pos.y/self.width)
+        i =  floor((self.pos.y+self.width)/self.width)
         if self.velocity.x and i<len(map):
             if self.velocity.x>0:
-                print(i, int((self.pos.y+self.width)//self.width), map[i][int((self.pos.y+self.width)//self.width)])
-                return map[i][int((self.pos.y+self.width)//self.width)] == 2
+                print(i,int((self.pos.y+self.width+self.width)//self.width), map[i][int((self.pos.y+self.width+self.width)//self.width)])
+                return map[i][int((self.pos.y+self.width+self.width)//self.width)] == 2
             elif self.velocity.x<0:
-                print(i, int((self.pos.y-self.width)//self.width), map[i][int((self.pos.y-self.width)//self.width)])
-                return map[i][int((self.pos.y-self.width)//self.width)] == 2
+                print(i,int((self.pos.y)//self.width) ,map[i][int((self.pos.y)//self.width)])
+                return map[i][int((self.pos.y)//self.width)] == 2
         return False
 
     def tryMining(self, map):
@@ -105,7 +106,7 @@ class Player:
         self.velocity.x *= self.slipperiness
         self.velocity.x += get_input_wasd().x * self.speed
         cannotGoX = self.cannotGoX(map)
-        #print(cannotGoX, self.velocity.x)
+        print(cannotGoX)
         if cannotGoX or -0.01<self.velocity.x<0.01:
             self.velocity.x=0
             if self.velocity.x<0:
