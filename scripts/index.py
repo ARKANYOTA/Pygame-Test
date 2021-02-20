@@ -1,13 +1,13 @@
-import sys, pygame
-from vector2 import *
-from perlinnoise import *
-from player import Player
-from random import randint, uniform
-from math import sin, cos, floor
-from input import *
+import sys
+
 from background import *
 from constants import *
 import time
+from input import *
+from perlinnoise import *
+from player import Player
+from block import *
+
 
 def main():
 
@@ -17,21 +17,13 @@ def main():
     DISPLAY = pygame.display.set_mode(SCREENSIZE, pygame.RESIZABLE)
     pygame.display.set_caption("EscaperOfWater")
 
-    # Game constants
+    # Game constants & textures
     # Moved to file: constants.py
 
-    # Textures
-    player1Texture = pygame.transform.scale(pygame.image.load("../textures/redsquare.png"), (32, 32))
-    playerTextures = [player1Texture, player1Texture]
-    groundTexture = pygame.transform.scale(pygame.image.load("../textures/groundTile.png"), BLOCKWIDTH_2TUPLE)
-    groundBGTexture = pygame.transform.scale(pygame.image.load("../textures/dummyDecoGround.png"), BLOCKWIDTH_2TUPLE)
-    blankTexture = pygame.transform.scale(pygame.image.load("../textures/blank.png"), BLOCKWIDTH_2TUPLE)
-    tileTextures = [blankTexture, groundBGTexture, groundTexture]
 
-    backgroundTexture = pygame.transform.scale(pygame.image.load("../textures/background_cave.png"), (SCRWIDTH, 2000))
 
     # Game variables and classes
-    noise = PerlinNoise(SEED, 0, 0, 10, SCRWIDTH//BLOCKWIDTH, SCRHEIGHT//BLOCKWIDTH+1)
+    noise = PerlinNoise(SEED, 0, 0, 10, SCRWIDTH // BLOCKWIDTH, SCRHEIGHT // BLOCKWIDTH + 1)
     background = Background(backgroundTexture, 0.6)
     noise.create_noisemap_list()
 
@@ -39,6 +31,7 @@ def main():
     players = [Player(DISPLAY, 1, 0, 0), Player(DISPLAY, 2, 0, 0)]
 
     delta = .1
+
     while True:
         lastTime = time.time()
         print(delta)
@@ -63,15 +56,20 @@ def main():
             noise.pos.y -= 1
             noise.screenpos.y %= BLOCKWIDTH
             noise.update_map()
-        noise.print_perlin_noise(DISPLAY, 0, noise.screenpos.y-BLOCKWIDTH, BLOCKWIDTH, tileTextures)
-
-        for player in players:
-            DISPLAY.blit(playerTextures[player.playerNumber - 1], (player.pos.x, player.pos.y))
-            player.update(delta, noise.map)#noise.get_noisemap_list())
-        pygame.display.flip()
+        noise.print_perlin_noise(DISPLAY, 0, noise.screenpos.y - BLOCKWIDTH, BLOCKWIDTH, tiles)
 
         delta = time.time() - lastTime
 
+        if len(players) < 1:
+            playerposinit = noise.find_empty_xy(BLOCKWIDTH)
+            players.append(Player(DISPLAY, len(players)+1, tiles, playerposinit[1], playerposinit[0], scrollspeed))
+
+        for player in players:
+            DISPLAY.blit(playerTextures[player.playerNumber - 1], (player.pos.x, player.pos.y))
+            player.update(delta, noise.map)  # noise.get_noisemap_list())
+        pygame.display.flip()
+
+    pygame.time.delay(16)
 
 
 main()

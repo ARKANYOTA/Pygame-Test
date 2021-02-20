@@ -1,8 +1,9 @@
-import pygame,sys
+import pygame, sys
 from vector2 import Vector2
 from input import *
 from math import floor
 from constants import *
+
 
 class Player:
     def __init__(self, display, playerNumber, x=0, y=0, width=BLOCKWIDTH, speed=500, slipperiness=0.5, gravity=500):
@@ -17,78 +18,85 @@ class Player:
         self.jumpspeed = -800
         self.slipperiness = slipperiness
         self.scrollspeed = scrollspeed
-        self.isGrounded = False
-        self.axe = 0
+        self.isOnGrounded = False
         self.pickaxe = 0
-        self.hand = 0
         self.lastDirection = 0  # 0 = Rien, 1= Droite, -1=Gauche
+        self.tiles = tiles
 
-    def setAxe(self, level):
-        self.axe = level
     def setPickaxe(self, level):
         self.pickaxe = level
-    def setHand(self, tool):
-        self.hand = tool
 
-    def setposition(self, x, y):
+    def setPosition(self, x, y):
         self.pos = Vector2(x, y)
+
     def setX(self, x):
         self.pos.x = x
+
     def setY(self, y):
         self.pos.y = y
+
     def moveX(self, x):
         self.pos.x += x
+
     def moveY(self, y):
         self.pos.y += y
 
-    def getposition(self):
+    def getPosition(self):
         return self.pos
+
     def getX(self):
         return self.pos.x
+
     def getY(self):
         return self.pos.y
 
     def getVelocity(self):
         return self.velocity
+
     def getXVelocity(self):
         return self.velocity.x
+
     def getYVelocity(self):
         return self.velocity.y
 
     def addXVelocity(self, xVelocity):
         self.velocity.x += xVelocity
+
     def setXVelocity(self, xVelocity):
         self.velocity.x = xVelocity
+
     def addYVelocity(self, yVelocity):
         self.velocity.y += yVelocity
+
     def setYVelocity(self, yVelocity):
         self.velocity.y = yVelocity
 
-    def getAxe(self):
-        return self.axe
     def getPickaxe(self):
         return self.pickaxe
-    def getHand(self):
-        return self.hand
+
     def getPlayerNumber(self):
         return self.playerNumber
 
-    def isGround(self, map, x, y):
-        i = floor((y + self.width)/ BLOCKWIDTH)
+    def isOnGround(self, map, x, y):
+        # TODO: make it not a try:except C'est fait bg
+        i = floor((y + self.width) / BLOCKWIDTH)
         j = floor(x / BLOCKWIDTH)
-        if 0 <= i+1 < len(map):
-            return map[i+1][j] == 2
-        return False
+        if i + 1 < len(map):
+            # print(i, j, map[i][j])
+            return self.tiles[map[i + 1][j]].collide
+        else:
+            return False
 
     def cannotGoX(self, map):
-        i = floor((self.pos.y+self.width)/self.width)
-        if self.velocity.x and i<len(map):
-            if self.velocity.x>0:
-                #print(i,int((self.pos.y+self.width+self.width)//self.width), map[i][int((self.pos.y+self.width+self.width)//self.width)])
-                return map[i][int((self.pos.y+self.width+self.width)//self.width)] == 2
-            elif self.velocity.x<0:
-                #print(i,int((self.pos.y)/self.width) ,map[i][int((self.pos.y)//self.width)])
-                return map[i][int((self.pos.y)//self.width)] == 2
+        i = floor((self.pos.y + self.width) / self.width)
+        if self.velocity.x and i < len(map):
+            if self.velocity.x > 0:
+                print(i, int((self.pos.y + self.width + self.width) // self.width),
+                      map[i][int((self.pos.y + self.width + self.width) // self.width)])
+                return self.tiles[map[i][int((self.pos.y + self.width + self.width) // self.width)]].collide
+            elif self.velocity.x < 0:
+                print(i, int(self.pos.y // self.width), map[i][int(self.pos.y // self.width)])
+                return self.tiles[map[i][int(self.pos.y // self.width)]].collide
         return False
 
     def tryMining(self, map):
@@ -114,9 +122,9 @@ class Player:
             vel.y = self.jumpspeed
 
         # Collision
-        if self.isGround(map, pos.x + vel.x, pos.y):
+        if self.isOnGround(map, pos.x + vel.x, pos.y):
             vel.x -= vel.x
-        if self.isGround(map, pos.x, pos.y+vel.y):
+        if self.isOnGround(map, pos.x, pos.y+vel.y):
             vel.y -= vel.y
 
         # Apply velocity
@@ -130,51 +138,51 @@ class Player:
 
     def update_old(self, map):
 
-        #if self.pos.y//self.width>len(map):
-            #pygame.quit()
-            #sys.exit()
+        # if self.pos.y//self.width>len(map):
+        # pygame.quit()
+        # sys.exit()
 
         self.velocity.x *= self.slipperiness
         self.velocity.x += get_input_wasd().x * self.speed
         cannotGoX = self.cannotGoX(map)
         print(cannotGoX)
-        if cannotGoX or -0.01<self.velocity.x<0.01:
+        if cannotGoX or -0.01 < self.velocity.x < 0.01:
             self.velocity.x = 0
-            if self.velocity.x != 0.0:
-                self.lastDirection = self.velocity.x / abs(self.velocity.x)
+            if self.velocity.x < 0:
+                self.lastDirection = -1
+            if self.velocity.x > 0:
+                self.lastDirection = 1
 
-        self.isGrounded = self.isGround(map)
-
+        self.isOnGrounded = self.isOnGround(map)
+        # print(self.isOnGrounded)
         # Gravity & velocity
         self.velocity.y += 0.4
         # Collision
-        if self.isGrounded:
+        if self.isOnGrounded:
             self.velocity.y = 0
-            #if self.pos.y%self.width !=0 :
+            # if self.pos.y%self.width !=0 :s
             #    self.pos.y = floor(self.pos.y/self.width)*self.width
 
         # Jumping
-        if self.isGrounded and get_input_wasd().y < 0:
+        if self.isOnGrounded and get_input_wasd().y < 0:
             self.velocity.y = -17
 
         self.pos += self.velocity
-        #Scroll
+        # Scroll
         self.pos.y += self.scrollspeed
 
         # MINING
         if get_input_space():
             self.tryMining()
 
-        #if self.isGrounded and self.pos.y%self.width !=0 :
+        # if self.isOnGrounded and self.pos.y%self.width !=0 :
         #    self.pos.y = floor(self.pos.y/self.width)*self.width
 
-
-        # if not self.isGround(map):
+        # if not self.isOnGround(map):
         #     if self.getYVelocity() < 4:
         #         self.addYVelocity(1)
         # else:
         #     self.setYVelocity(0)
-
 
     # def init(self):
     #     for x in range(0, 1100, 32):
