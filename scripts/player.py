@@ -2,16 +2,19 @@ import pygame,sys
 from vector2 import Vector2
 from input import *
 from math import floor
+from constants import *
 
 class Player:
-    def __init__(self, display, playerNumber, x=0, y=0, scrollspeed=0.5, width=32, speed=0.5, slipperiness=0.9):
-        self.display =  display
+    def __init__(self, display, playerNumber, x=0, y=0, width=BLOCKWIDTH, speed=500, slipperiness=0.5, gravity=500):
+        self.display = display
         self.playerNumber = playerNumber
         self.screenPosition = Vector2(x, y)
         self.pos = Vector2(x, y)
         self.velocity = Vector2()
+        self.gravity = gravity
         self.width = width
         self.speed = speed
+        self.jumpspeed = -800
         self.slipperiness = slipperiness
         self.scrollspeed = scrollspeed
         self.isGrounded = False
@@ -70,24 +73,21 @@ class Player:
     def getPlayerNumber(self):
         return self.playerNumber
 
-    def isOnGround(self, map):
-        # TODO: make it not a try:except C'est fait bg
-        i = floor((self.pos.y+self.width)/self.width)
-        j = floor(self.pos.x/self.width)
-        if i+1<len(map):
-            #print(i, j, map[i][j])
+    def isGround(self, map, x, y):
+        i = floor((y + self.width)/ BLOCKWIDTH)
+        j = floor(x / BLOCKWIDTH)
+        if 0 <= i+1 < len(map):
             return map[i+1][j] == 2
-        else :
-            return False
+        return False
 
     def cannotGoX(self, map):
-        i =  floor((self.pos.y+self.width)/self.width)
+        i = floor((self.pos.y+self.width)/self.width)
         if self.velocity.x and i<len(map):
             if self.velocity.x>0:
-                print(i,int((self.pos.y+self.width+self.width)//self.width), map[i][int((self.pos.y+self.width+self.width)//self.width)])
+                #print(i,int((self.pos.y+self.width+self.width)//self.width), map[i][int((self.pos.y+self.width+self.width)//self.width)])
                 return map[i][int((self.pos.y+self.width+self.width)//self.width)] == 2
             elif self.velocity.x<0:
-                print(i,int((self.pos.y)//self.width) ,map[i][int((self.pos.y)//self.width)])
+                #print(i,int((self.pos.y)/self.width) ,map[i][int((self.pos.y)//self.width)])
                 return map[i][int((self.pos.y)//self.width)] == 2
         return False
 
@@ -96,8 +96,39 @@ class Player:
         # TODO: Detection si y a un block avec self.lastDirection
         # TODO Si y a block le casser et le mettre dans l'inv
 
-        
-    def update(self, map):
+    def update(self, delta, map):
+        inp = [None, get_input_wasd, get_input_arrows]
+        inputVector = inp[self.playerNumber]()
+        vel = self.velocity
+        pos = self.pos
+
+        # Horizontal movement
+        vel.x += inputVector.x * self.speed
+        vel.x *= self.slipperiness
+
+        # Gravity
+        vel.y += self.gravity
+
+        # Jumping
+        if inputVector.y < 0:
+            vel.y = self.jumpspeed
+
+        # Collision
+        if self.isGround(map, pos.x + vel.x, pos.y):
+            vel.x -= vel.x
+        if self.isGround(map, pos.x, pos.y+vel.y):
+            vel.y -= vel.y
+
+        # Apply velocity
+        self.velocity = vel * delta
+        self.pos += self.velocity
+
+
+        #Scroll
+        #self.pos.y += self.scrollspeed
+
+
+    def update_old(self, map):
 
         #if self.pos.y//self.width>len(map):
             #pygame.quit()
@@ -108,14 +139,12 @@ class Player:
         cannotGoX = self.cannotGoX(map)
         print(cannotGoX)
         if cannotGoX or -0.01<self.velocity.x<0.01:
-            self.velocity.x=0
-            if self.velocity.x<0:
-                self.lastDirection = -1
-            if self.velocity.x>0:
-                self.lastDirection = 1
+            self.velocity.x = 0
+            if self.velocity.x != 0.0:
+                self.lastDirection = self.velocity.x / abs(self.velocity.x)
 
-        self.isGrounded = self.isOnGround(map)
-        #print(self.isGrounded)
+        self.isGrounded = self.isGround(map)
+
         # Gravity & velocity
         self.velocity.y += 0.4
         # Collision
@@ -139,8 +168,8 @@ class Player:
         #if self.isGrounded and self.pos.y%self.width !=0 :
         #    self.pos.y = floor(self.pos.y/self.width)*self.width
 
-        
-        # if not self.isOnGround(map):
+
+        # if not self.isGround(map):
         #     if self.getYVelocity() < 4:
         #         self.addYVelocity(1)
         # else:

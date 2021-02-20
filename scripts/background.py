@@ -4,7 +4,7 @@ from constants import SCRHEIGHT
 class Background:
     def __init__(self, texture, parallaxMultiplier, x=0, y=0):
         self.texture = texture
-        self.textureSize = Vector2(1280, 1900)
+        self.textureSize = Vector2(1280, 2000)
         self.parallaxMultiplier = parallaxMultiplier
         self.pos = Vector2(x, y)
 

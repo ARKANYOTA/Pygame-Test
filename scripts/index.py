@@ -7,14 +7,15 @@ from math import sin, cos, floor
 from input import *
 from background import *
 from constants import *
+import time
 
 def main():
 
     # Pygame & screen setup
     pygame.init()
     print("Ca marche askip bis")
-    DISPLAY = pygame.display.set_mode(screensize, pygame.RESIZABLE)
-    pygame.display.set_caption("ChawserofGold")
+    DISPLAY = pygame.display.set_mode(SCREENSIZE, pygame.RESIZABLE)
+    pygame.display.set_caption("EscaperOfWater")
 
     # Game constants
     # Moved to file: constants.py
@@ -32,12 +33,15 @@ def main():
     # Game variables and classes
     noise = PerlinNoise(SEED, 0, 0, 10, SCRWIDTH//BLOCKWIDTH, SCRHEIGHT//BLOCKWIDTH+1)
     background = Background(backgroundTexture, 0.6)
-    scrollspeed = 10
     noise.create_noisemap_list()
 
-    # Players init
-    players = []
+    # Players
+    players = [Player(DISPLAY, 1, 0, 0), Player(DISPLAY, 2, 0, 0)]
+
+    delta = .1
     while True:
+        lastTime = time.time()
+        print(delta)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -51,25 +55,23 @@ def main():
 
         # Noise scrolling
         # TODO: move to seperate update method
-        noise.screenpos.y += scrollspeed
-        background.scroll(scrollspeed)
-        background.render(DISPLAY)
+        # background.scroll(scrollspeed)
+        # background.render(DISPLAY)
 
+        #noise.screenpos.y += scrollspeed * delta
         if noise.screenpos.y > BLOCKWIDTH:
             noise.pos.y -= 1
             noise.screenpos.y %= BLOCKWIDTH
             noise.update_map()
         noise.print_perlin_noise(DISPLAY, 0, noise.screenpos.y-BLOCKWIDTH, BLOCKWIDTH, tileTextures)
 
-        if len(players) == 0:
-            playerposinit = noise.find_empty_xy(BLOCKWIDTH)
-            players.append(Player(DISPLAY, 1, playerposinit[1], playerposinit[0], scrollspeed))
-
         for player in players:
             DISPLAY.blit(playerTextures[player.playerNumber - 1], (player.pos.x, player.pos.y))
-            player.update(noise.map)#noise.get_noisemap_list())
+            player.update(delta, noise.map)#noise.get_noisemap_list())
         pygame.display.flip()
 
-    #pygame.time.delay(16)
+        delta = time.time() - lastTime
+
+
 
 main()
