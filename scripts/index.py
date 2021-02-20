@@ -28,13 +28,24 @@ def main():
     noise.create_noisemap_list()
 
     # Players
-    players = [Player(DISPLAY, 1, 0, 0), Player(DISPLAY, 2, 0, 0)]
+    players = [Player(DISPLAY, 1, 0, 0)]#, Player(DISPLAY, 2, 0, 0)]
 
     delta = .1
 
+    for i in noise.map:
+        for j in i:
+            if j == 0:
+                print(" ", end=" ")
+            elif j == 1:
+                print(".", end=" ")
+            else:
+                print("#", end=" ")
+        print()
+    print("\n --------------------------------------------- \n")
+
     while True:
         lastTime = time.time()
-        print(delta)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()

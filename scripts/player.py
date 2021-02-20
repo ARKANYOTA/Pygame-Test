@@ -6,7 +6,7 @@ from constants import *
 
 
 class Player:
-    def __init__(self, display, playerNumber, x=0, y=0, width=BLOCKWIDTH, speed=500, slipperiness=0.5, gravity=500):
+    def __init__(self, display, playerNumber, x=0, y=0, width=BLOCKWIDTH, speed=500, slipperiness=0.5, gravity=200):
         self.display = display
         self.playerNumber = playerNumber
         self.screenPosition = Vector2(x, y)
@@ -79,13 +79,16 @@ class Player:
 
     def isOnGround(self, map, x, y):
         # TODO: make it not a try:except C'est fait bg
-        i = floor((y + self.width) / BLOCKWIDTH)
+        i = floor(y / BLOCKWIDTH)
         j = floor(x / BLOCKWIDTH)
-        if i + 1 < len(map):
+        if 0 <= i+1 < len(map):
             # print(i, j, map[i][j])
+            print(x, y, map[i + 1][j], i+1, j)
+            return map[i + 1][j]==2
             return self.tiles[map[i + 1][j]].collide
         else:
             return False
+
 
     def cannotGoX(self, map):
         i = floor((self.pos.y + self.width) / self.width)
@@ -105,8 +108,7 @@ class Player:
         # TODO Si y a block le casser et le mettre dans l'inv
 
     def update(self, delta, map):
-        inp = [None, get_input_wasd, get_input_arrows]
-        inputVector = inp[self.playerNumber]()
+        inputVector = get_input_wasd()
         vel = self.velocity
         pos = self.pos
 
@@ -118,17 +120,18 @@ class Player:
         vel.y += self.gravity
 
         # Jumping
-        if inputVector.y < 0:
-            vel.y = self.jumpspeed
+        #if inputVector.y < 0:
+        #    vel.y = self.jumpspeed
+
+        vel = vel * delta
 
         # Collision
         if self.isOnGround(map, pos.x + vel.x, pos.y):
-            vel.x -= vel.x
-        if self.isOnGround(map, pos.x, pos.y+vel.y):
-            vel.y -= vel.y
-
+            vel.x = .0
+        if self.isOnGround(map, pos.x,         pos.y + vel.y):
+            vel.y = .0
         # Apply velocity
-        self.velocity = vel * delta
+        self.velocity = vel
         self.pos += self.velocity
 
 
