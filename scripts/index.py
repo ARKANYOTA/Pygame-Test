@@ -13,7 +13,8 @@ def main():
     # Pygame & screen setup
     pygame.init()
     print("Ca marche askip bis")
-    DISPLAY = pygame.display.set_mode(SCREENSIZE, pygame.RESIZABLE)
+    DISPLAY = pygame.display.set_mode(screensize, pygame.RESIZABLE)
+    pygame.display.set_caption("ChawserofGold")
 
     # Game constants
     # Moved to file: constants.py

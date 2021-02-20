@@ -14,3 +14,7 @@ def get_input_wasd():
     down  = pygame.key.get_pressed()[pygame.K_s]
     right = pygame.key.get_pressed()[pygame.K_d]
     return Vector2(right - left, down - up)
+
+def get_input_space():
+    space = pygame.key.get_pressed()[pygame.K_SPACE]
+    return space
