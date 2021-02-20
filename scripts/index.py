@@ -13,7 +13,7 @@ def main():
     # Pygame & screen setup
     pygame.init()
     print("Ca marche askip bis")
-    DISPLAY = pygame.display.set_mode(screensize, pygame.RESIZABLE)
+    DISPLAY = pygame.display.set_mode(SCREENSIZE, pygame.RESIZABLE)
 
     # Game constants
     # Moved to file: constants.py
@@ -26,12 +26,12 @@ def main():
     blankTexture = pygame.transform.scale(pygame.image.load("../textures/blank.png"), BLOCKWIDTH_2TUPLE)
     tileTextures = [blankTexture, groundBGTexture, groundTexture]
 
-    backgroundTexture = pygame.transform.scale(pygame.image.load("../textures/background_cave.png"), (scrwidth, 2000))
+    backgroundTexture = pygame.transform.scale(pygame.image.load("../textures/background_cave.png"), (SCRWIDTH, 2000))
 
     # Game variables and classes
-    noise = PerlinNoise(SEED, 0, 0, 10, scrwidth//BLOCKWIDTH, scrheight//BLOCKWIDTH+1)
+    noise = PerlinNoise(SEED, 0, 0, 10, SCRWIDTH//BLOCKWIDTH, SCRHEIGHT//BLOCKWIDTH+1)
     background = Background(backgroundTexture, 0.6)
-    scrollspeed = 5
+    scrollspeed = 10
     noise.create_noisemap_list()
 
     # Players init

@@ -70,35 +70,31 @@ class PerlinNoise:
     def clamp(self, val, a, b):
         return max(a, min(val, b))
 
-    def create_noisemap_list(self):
-        li = [[0] * self.width] * self.height
-        for row in range(self.height):
-            li2 = [0] * self.width
-            for col in range(self.width):
-                noise = self.perlin_noise(col+self.pos.x, row+self.pos.y, self.scale)
-                if .56 < noise:
-                    noise = 2
-                elif .45 < noise:
-                    noise = 1
-                else:
-                    noise = 0
-                li2[col] = noise
-            li[row] = li2
-        self.map = li
-
-    def update_map(self):
-        del self.map[-1]
-        li2 = [0] * self.width
-        for col in range(self.width):
-            noise = self.perlin_noise(col+self.pos.x, 0+self.pos.y, self.scale)
+    def generate_noise_row(self, y):
+        li = [0] * self.width
+        for x in range(self.width):
+            noise = self.perlin_noise(x+self.pos.x, y, self.scale)
             if .56 < noise:
                 noise = 2
             elif .45 < noise:
                 noise = 1
             else:
                 noise = 0
-            li2[col] = noise
-        self.map.insert(0,li2)
+            li[x] = noise
+        return li
+
+    def create_noisemap_list(self):
+        # Generates an entire maps
+        li = [[0] * self.width] * self.height
+        for row in range(self.height):
+            li[row] = self.generate_noise_row(row + self.pos.y)
+        self.map = li
+
+    def update_map(self):
+        # Updates a single row of the map and scrolls everything down
+        del self.map[-1]
+        li = self.generate_noise_row(self.pos.y)
+        self.map.insert(0, li)
 
 
     def print_perlin_noise(self, display, screen_x, screen_y, blockwidth, tileTextures):
