@@ -107,11 +107,11 @@ class PerlinNoise:
             li2[col] = noise
         self.map.insert(0, li2)
 
-    def print_perlin_noise(self, display, screen_x, screen_y, blockwidth, tileTextures):
+    def print_perlin_noise(self, display, screen_x, screen_y, blockwidth, tiles):
         for row in range(self.height):
             for col in range(self.width):
                 noise = self.map[row][col]
-                display.blit(tileTextures[noise], (col * blockwidth + screen_x, row * blockwidth + screen_y))
+                display.blit(tiles[noise].texture, (col * blockwidth + screen_x, row * blockwidth + screen_y))
         return True
 
     def find_empty_xy(self, blockw):

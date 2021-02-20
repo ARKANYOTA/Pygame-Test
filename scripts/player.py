@@ -5,7 +5,7 @@ from math import floor
 
 
 class Player:
-    def __init__(self, display, playerNumber, x=0, y=0, scrollspeed=0.5, width=32, speed=0.5, slipperiness=0.9):
+    def __init__(self, display, playerNumber, tiles, x=0, y=0, scrollspeed=0.5, width=32, speed=0.5, slipperiness=0.9):
         self.display = display
         self.playerNumber = playerNumber
         self.screenPosition = Vector2(x, y)
@@ -16,21 +16,14 @@ class Player:
         self.slipperiness = slipperiness
         self.scrollspeed = scrollspeed
         self.isGrounded = False
-        self.axe = 0
         self.pickaxe = 0
-        self.hand = 0
         self.lastDirection = 0  # 0 = Rien, 1= Droite, -1=Gauche
-
-    def setAxe(self, level):
-        self.axe = level
+        self.tiles = tiles
 
     def setPickaxe(self, level):
         self.pickaxe = level
 
-    def setHand(self, tool):
-        self.hand = tool
-
-    def setposition(self, x, y):
+    def setPosition(self, x, y):
         self.pos = Vector2(x, y)
 
     def setX(self, x):
@@ -45,7 +38,7 @@ class Player:
     def moveY(self, y):
         self.pos.y += y
 
-    def getposition(self):
+    def getPosition(self):
         return self.pos
 
     def getX(self):
@@ -75,14 +68,8 @@ class Player:
     def setYVelocity(self, yVelocity):
         self.velocity.y = yVelocity
 
-    def getAxe(self):
-        return self.axe
-
     def getPickaxe(self):
         return self.pickaxe
-
-    def getHand(self):
-        return self.hand
 
     def getPlayerNumber(self):
         return self.playerNumber
@@ -93,7 +80,7 @@ class Player:
         j = floor(self.pos.x / self.width)
         if i + 1 < len(map):
             # print(i, j, map[i][j])
-            return map[i + 1][j] == 2
+            return self.tiles[map[i + 1][j]].collide
         else:
             return False
 
@@ -103,10 +90,10 @@ class Player:
             if self.velocity.x > 0:
                 print(i, int((self.pos.y + self.width + self.width) // self.width),
                       map[i][int((self.pos.y + self.width + self.width) // self.width)])
-                return map[i][int((self.pos.y + self.width + self.width) // self.width)] == 2
+                return self.tiles[map[i][int((self.pos.y + self.width + self.width) // self.width)]].collide
             elif self.velocity.x < 0:
                 print(i, int(self.pos.y // self.width), map[i][int(self.pos.y // self.width)])
-                return map[i][int(self.pos.y // self.width)] == 2
+                return self.tiles[map[i][int(self.pos.y // self.width)]].collide
         return False
 
     def tryMining(self, map):
